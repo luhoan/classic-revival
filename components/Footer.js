@@ -33,8 +33,8 @@ export default function Footer() {
 
           {/* Social */}
           <div className="flex items-center gap-4 mb-6">
-            <a href="#" className="font-accent text-sm hover:opacity-70 transition-opacity" style={{ color: 'var(--text-secondary)' }}>
-              instagram
+            <a href="https://instagram.com/classicrevivalliterature" target="_blank" rel="noopener noreferrer" className="font-accent text-sm hover:opacity-70 transition-opacity" style={{ color: 'var(--text-secondary)' }}>
+              @classicrevivalliterature
             </a>
             <span style={{ color: 'var(--border-color)' }}>·</span>
             <a href="#" className="font-accent text-sm hover:opacity-70 transition-opacity" style={{ color: 'var(--text-secondary)' }}>

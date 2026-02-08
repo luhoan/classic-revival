@@ -4,6 +4,7 @@ import Head from 'next/head'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { ThemeContext } from './_app'
+import { store } from '../lib/store'
 import { Search, BookOpen, Heart, Users, ArrowRight, Mail, Sparkles, Quote, ChevronDown, Code, MapPin } from 'lucide-react'
 
 const featuredBooks = [
@@ -17,7 +18,6 @@ const teamMembers = [
   { role: 'founder', name: 'Levi Segal', email: 'levi@classicrevival.org', image: '📚' },
   { role: 'vice president', name: 'Hershey', email: 'hershey@classicrevival.org', image: '🎯' },
   { role: 'lead developer', name: 'Luan Hoang', email: 'luan@classicrevival.org', image: '💻' },
-  { role: 'lead developer', name: 'Jiewen Huang', email: 'jiewen@classicrevival.org', image: '⚡' },
 ]
 
 export default function Home() {
@@ -25,29 +25,31 @@ export default function Home() {
   const [searchResults, setSearchResults] = useState([])
   const [showResults, setShowResults] = useState(false)
   const [isVisible, setIsVisible] = useState({})
+  const [allBooks, setAllBooks] = useState([])
   const { theme } = useContext(ThemeContext)
 
-  const allBooks = [
-    { id: 1, title: 'Pride and Prejudice', author: 'Jane Austen' },
-    { id: 2, title: 'Moby Dick', author: 'Herman Melville' },
-    { id: 3, title: 'Great Expectations', author: 'Charles Dickens' },
-    { id: 4, title: 'Jane Eyre', author: 'Charlotte Brontë' },
-    { id: 5, title: 'Wuthering Heights', author: 'Emily Brontë' },
-    { id: 6, title: 'The Odyssey', author: 'Homer' },
-    { id: 7, title: 'Don Quixote', author: 'Miguel de Cervantes' },
-    { id: 8, title: 'War and Peace', author: 'Leo Tolstoy' },
-    { id: 9, title: 'Crime and Punishment', author: 'Fyodor Dostoevsky' },
-    { id: 10, title: 'The Divine Comedy', author: 'Dante Alighieri' },
-  ]
+  // Load books from library
+  useEffect(() => {
+    const loadBooks = async () => {
+      try {
+        const libraryBooks = await store.initializeBooksFromLibrary()
+        setAllBooks(libraryBooks)
+      } catch (error) {
+        console.error('Failed to load books:', error)
+        setAllBooks(store.getBooks())
+      }
+    }
+    loadBooks()
+  }, [])
 
   const handleSearch = (e) => {
     const query = e.target.value
     setSearchQuery(query)
     if (query.length > 0) {
-      const results = allBooks.filter(book => 
+      const results = allBooks.filter(book =>
         book.title.toLowerCase().includes(query.toLowerCase()) ||
         book.author.toLowerCase().includes(query.toLowerCase())
-      )
+      ).slice(0, 8) // Limit to 8 results for better UX
       setSearchResults(results)
       setShowResults(true)
     } else {
@@ -354,7 +356,7 @@ export default function Home() {
               <h2 className="font-display text-4xl md:text-5xl font-bold mb-6" style={{ color: 'var(--text-primary)' }}>our team</h2>
             </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
               {teamMembers.map((member, index) => (
                 <div key={index} className="card-classic text-center">
                   <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl" style={{ background: 'rgba(114, 47, 55, 0.1)' }}>
@@ -373,7 +375,7 @@ export default function Home() {
             <div className="text-center">
               <p className="font-body mb-4" style={{ color: 'var(--text-secondary)' }}>find us online</p>
               <div className="flex justify-center items-center gap-6">
-                <a href="#" className="font-accent text-sm hover:opacity-70 transition-opacity" style={{ color: 'var(--text-secondary)' }}>instagram</a>
+                <a href="https://instagram.com/classicrevivalliterature" target="_blank" rel="noopener noreferrer" className="font-accent text-sm hover:opacity-70 transition-opacity" style={{ color: 'var(--text-secondary)' }}>@classicrevivalliterature</a>
                 <span style={{ color: 'var(--border-color)' }}>·</span>
                 <a href="#" className="font-accent text-sm hover:opacity-70 transition-opacity" style={{ color: 'var(--text-secondary)' }}>linkedin</a>
               </div>

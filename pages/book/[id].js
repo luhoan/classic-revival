@@ -4,9 +4,10 @@ import Link from 'next/link'
 import Head from 'next/head'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
+import BookReader from '../../components/BookReader'
 import { ThemeContext, AuthContext } from '../_app'
 import { store } from '../../lib/store'
-import { ArrowLeft, BookOpen, Clock, Calendar, FileText, Download, Star, MessageCircle, ChevronRight, ChevronLeft, Send, Trash2, User } from 'lucide-react'
+import { ArrowLeft, BookOpen, Clock, Calendar, FileText, Download, Star, MessageCircle, ChevronRight, ChevronLeft, Send, Trash2, User, Book } from 'lucide-react'
 
 const defaultLectures = [
   { id: 1, title: 'Introduction & Historical Context', duration: '45 min', content: 'An overview of the author\'s life and the historical period.' },
@@ -22,7 +23,8 @@ export default function BookPage() {
   const { id, tab } = router.query
   
   const [book, setBook] = useState(null)
-  const [activeTab, setActiveTab] = useState('lectures')
+  const [bookContent, setBookContent] = useState(null)
+  const [activeTab, setActiveTab] = useState('read')
   const [discussions, setDiscussions] = useState([])
   const [newMessage, setNewMessage] = useState('')
   const [replyTo, setReplyTo] = useState(null)
@@ -31,6 +33,7 @@ export default function BookPage() {
   const [userRating, setUserRating] = useState(null)
   const [showRatingSlider, setShowRatingSlider] = useState(false)
   const [ratingCount, setRatingCount] = useState(0)
+  const [loadingContent, setLoadingContent] = useState(false)
   
   useEffect(() => {
     if (id) {
@@ -41,6 +44,16 @@ export default function BookPage() {
       setRatingCount(ratings.length)
       setAvgRating(store.getAverageRating(parseInt(id)))
       if (user) setUserRating(store.getUserRating(parseInt(id), user.id))
+
+      // Load full book content
+      setLoadingContent(true)
+      store.getBookContent(id).then(content => {
+        setBookContent(content)
+        setLoadingContent(false)
+      }).catch(err => {
+        console.error('Failed to load book content:', err)
+        setLoadingContent(false)
+      })
     }
     if (tab) setActiveTab(tab)
   }, [id, tab, user])
@@ -106,6 +119,7 @@ export default function BookPage() {
   }
 
   const tabs = [
+    { id: 'read', label: 'Read', icon: Book },
     { id: 'lectures', label: 'Lectures', icon: FileText },
     { id: 'discussions', label: 'Discussions', icon: MessageCircle, count: discussions.length },
     { id: 'download', label: 'Download', icon: Download },
@@ -199,10 +213,64 @@ export default function BookPage() {
 
         {/* Content */}
         <section className="py-10">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className={activeTab === 'read' ? '' : 'max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'}>
+            {activeTab === 'read' && (
+              loadingContent ? (
+                <div className="flex items-center justify-center py-20">
+                  <div className="text-center">
+                    <BookOpen className="w-16 h-16 mx-auto mb-4 animate-pulse" style={{ color: 'var(--text-secondary)', opacity: 0.3 }} />
+                    <p className="font-body" style={{ color: 'var(--text-secondary)' }}>Loading book...</p>
+                  </div>
+                </div>
+              ) : bookContent ? (
+                <BookReader bookContent={bookContent} />
+              ) : (
+                <div className="flex items-center justify-center py-20">
+                  <div className="text-center max-w-md mx-auto px-4">
+                    <BookOpen className="w-16 h-16 mx-auto mb-4" style={{ color: 'var(--text-secondary)', opacity: 0.3 }} />
+                    <p className="font-body mb-4" style={{ color: 'var(--text-secondary)' }}>Book content not yet available</p>
+                    {book?.gutenberg_url && (
+                      <a href={book.gutenberg_url} target="_blank" rel="noopener noreferrer" className="btn-primary text-sm">
+                        View on Project Gutenberg
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )
+            )}
+
             {activeTab === 'lectures' && (
+              <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
               <div>
                 <h2 className="font-display text-2xl font-bold mb-6" style={{ color: 'var(--text-primary)' }}>Lecture Notes</h2>
+
+                {/* External Resources Section */}
+                {bookContent?.external_resources && bookContent.external_resources.length > 0 && (
+                  <div className="mb-8">
+                    <h3 className="font-display text-xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>External Resources</h3>
+                    <div className="space-y-3">
+                      {bookContent.external_resources.map((resource, index) => (
+                        <a
+                          key={index}
+                          href={resource}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block p-4 rounded-xl hover:shadow-lg transition-all"
+                          style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}
+                        >
+                          <div className="flex items-center gap-3">
+                            <FileText className="w-5 h-5 flex-shrink-0" style={{ color: 'var(--burgundy)' }} />
+                            <div className="flex-1 min-w-0">
+                              <p className="font-accent text-sm truncate" style={{ color: 'var(--text-primary)' }}>{resource}</p>
+                            </div>
+                            <ChevronRight className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--text-secondary)' }} />
+                          </div>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div className="space-y-4">
                   {defaultLectures.map((lecture, index) => (
                     <div key={lecture.id} className="p-5 rounded-xl" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
@@ -224,9 +292,11 @@ export default function BookPage() {
                   ))}
                 </div>
               </div>
+              </div>
             )}
 
             {activeTab === 'discussions' && (
+              <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
               <div>
                 <h2 className="font-display text-2xl font-bold mb-6" style={{ color: 'var(--text-primary)' }}>Discussions</h2>
                 
@@ -322,11 +392,61 @@ export default function BookPage() {
                   )}
                 </div>
               </div>
+              </div>
             )}
 
             {activeTab === 'download' && (
+              <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
               <div>
-                <h2 className="font-display text-2xl font-bold mb-6" style={{ color: 'var(--text-primary)' }}>Download</h2>
+                <h2 className="font-display text-2xl font-bold mb-6" style={{ color: 'var(--text-primary)' }}>Download & Resources</h2>
+
+                {/* Project Gutenberg Link */}
+                {(book?.gutenberg_url || bookContent?.gutenberg_url) && (
+                  <div className="mb-6 p-4 rounded-xl" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+                    <h3 className="font-display font-bold mb-2" style={{ color: 'var(--text-primary)' }}>Project Gutenberg</h3>
+                    <p className="text-sm mb-3" style={{ color: 'var(--text-secondary)' }}>Access various formats and more information</p>
+                    <a
+                      href={book?.gutenberg_url || bookContent?.gutenberg_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-accent text-sm transition-all"
+                      style={{ background: 'var(--burgundy)', color: 'white' }}
+                    >
+                      <Download className="w-4 h-4" />
+                      View on Project Gutenberg
+                    </a>
+                  </div>
+                )}
+
+                {/* External Resources */}
+                {bookContent?.external_resources && bookContent.external_resources.length > 0 && (
+                  <div className="mb-6">
+                    <h3 className="font-display text-xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>External Resources</h3>
+                    <div className="space-y-3">
+                      {bookContent.external_resources.map((resource, index) => (
+                        <a
+                          key={index}
+                          href={resource}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block p-4 rounded-xl hover:shadow-lg transition-all"
+                          style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}
+                        >
+                          <div className="flex items-center gap-3">
+                            <FileText className="w-5 h-5 flex-shrink-0" style={{ color: 'var(--burgundy)' }} />
+                            <div className="flex-1 min-w-0">
+                              <p className="font-accent text-sm truncate" style={{ color: 'var(--text-primary)' }}>{resource}</p>
+                            </div>
+                            <ChevronRight className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--text-secondary)' }} />
+                          </div>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Download Formats */}
+                <h3 className="font-display text-xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>Download Formats</h3>
                 <div className="grid md:grid-cols-3 gap-4">
                   {['PDF', 'EPUB', 'Audio'].map((format, i) => (
                     <button key={i} className="p-6 rounded-xl text-left hover:shadow-lg transition-all" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
@@ -336,6 +456,7 @@ export default function BookPage() {
                     </button>
                   ))}
                 </div>
+              </div>
               </div>
             )}
           </div>

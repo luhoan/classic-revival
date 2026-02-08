@@ -8,7 +8,7 @@ import { ThemeContext, AuthContext } from './_app'
 import { store, getBookDesign } from '../lib/store'
 import { Search, BookOpen, X, Star, Download, MessageCircle, FileText, ChevronRight, Clock, Calendar } from 'lucide-react'
 
-const genres = ['All', 'Romance', 'Adventure', 'Coming-of-age', 'Gothic', 'Epic', 'Satire', 'Historical', 'Psychological', 'Realism', 'Philosophical']
+const genres = ['All', 'Fiction', 'Philosophy', 'Drama', 'Poetry', 'History', 'Biography', 'Epic', 'Religion', 'Politics', 'Science', 'Literature', 'Psychology', 'Romance', 'Classic']
 
 const darkBookColors = [
   '#2a1f1a', '#1a1a2e', '#1e3d2f', '#2d1b2d', '#1a2633',
@@ -190,9 +190,25 @@ export default function Library() {
   const [selectedBook, setSelectedBook] = useState(null)
   const [hoveredBook, setHoveredBook] = useState(null)
   const [hoveredShelf, setHoveredShelf] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    setBooks(store.getBooks())
+    // Load books from library_master.json
+    const loadBooks = async () => {
+      setLoading(true)
+      try {
+        const libraryBooks = await store.initializeBooksFromLibrary()
+        setBooks(libraryBooks)
+      } catch (error) {
+        console.error('Failed to load books:', error)
+        // Fallback to placeholder books
+        setBooks(store.getBooks())
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadBooks()
     if (router.query.search) setSearchQuery(router.query.search)
   }, [router.query])
 
@@ -233,7 +249,12 @@ export default function Library() {
 
         <section className="py-10">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 bookshelf-3d">
-            {shelves.length > 0 ? (
+            {loading ? (
+              <div className="text-center py-20">
+                <BookOpen className="w-16 h-16 mx-auto mb-4 animate-pulse" style={{ color: 'var(--text-secondary)', opacity: 0.3 }} />
+                <p className="font-display text-2xl" style={{ color: 'var(--text-secondary)' }}>Loading library...</p>
+              </div>
+            ) : shelves.length > 0 ? (
               <div className="space-y-8">
                 {shelves.map((shelf, shelfIndex) => (
                   <div key={shelfIndex} className="shelf-container">
