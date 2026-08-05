@@ -83,7 +83,7 @@ export default function AdminPanel() {
             {/* Stats */}
             <div className="grid md:grid-cols-3 gap-4 mb-10">
               {stats.map((stat, i) => (
-                <Link key={i} href={stat.href} className="p-5 rounded-xl transition-all hover:shadow-lg" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+                <Link key={i} href={stat.href} className="p-5 rounded-[3px] transition-all hover:shadow-lg" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="font-accent text-sm" style={{ color: 'var(--text-secondary)' }}>{stat.label}</p>
@@ -96,7 +96,7 @@ export default function AdminPanel() {
             </div>
 
             {/* Books Management */}
-            <div id="books" className="rounded-xl p-6" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+            <div id="books" className="rounded-[3px] p-6" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
               <div className="flex items-center justify-between mb-6">
                 <h2 className="font-display text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Manage Books</h2>
                 <button onClick={() => setShowAddBook(true)} className="btn-primary text-sm py-2 px-4 flex items-center gap-2">
@@ -106,7 +106,7 @@ export default function AdminPanel() {
 
               {/* Add Book Form */}
               {showAddBook && (
-                <form onSubmit={handleAddBook} className="mb-6 p-4 rounded-lg" style={{ background: 'var(--bg-tertiary)' }}>
+                <form onSubmit={handleAddBook} className="mb-6 p-4 rounded-[2px]" style={{ background: 'var(--bg-tertiary)' }}>
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-accent font-semibold" style={{ color: 'var(--text-primary)' }}>Add New Book</h3>
                     <button type="button" onClick={() => setShowAddBook(false)}><X className="w-5 h-5" style={{ color: 'var(--text-secondary)' }} /></button>
@@ -135,7 +135,7 @@ export default function AdminPanel() {
 
               {/* Edit Book Form */}
               {editingBook && (
-                <form onSubmit={handleUpdateBook} className="mb-6 p-4 rounded-lg" style={{ background: 'var(--bg-tertiary)' }}>
+                <form onSubmit={handleUpdateBook} className="mb-6 p-4 rounded-[2px]" style={{ background: 'var(--bg-tertiary)' }}>
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-accent font-semibold" style={{ color: 'var(--text-primary)' }}>Edit Book</h3>
                     <button type="button" onClick={() => setEditingBook(null)}><X className="w-5 h-5" style={{ color: 'var(--text-secondary)' }} /></button>

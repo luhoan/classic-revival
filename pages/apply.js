@@ -1,20 +1,28 @@
 import { useState, useContext } from 'react'
-import Head from 'next/head'
 import Link from 'next/link'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import Seo from '../components/Seo'
+import { PageHero } from '../components/ui'
 import { AuthContext } from './_app'
 import { store } from '../lib/store'
-import { ArrowLeft, CheckCircle, BookOpen, Code, MapPin, Send } from 'lucide-react'
+import { submitForm } from '../lib/forms'
+import { CheckCircle, BookOpen, Code, MapPin } from 'lucide-react'
+import { Input } from '../components/ui/input'
+import { Textarea } from '../components/ui/textarea'
+import { Label } from '../components/ui/label'
+import { Button } from '../components/ui/button'
+import { useReveal } from '../lib/useReveal'
 
 const positions = [
-  { id: 'content', title: 'content contributor', icon: BookOpen, description: 'create lecture notes and reading guides for classic works.', commitment: '5-10 hrs/week' },
-  { id: 'chapter', title: 'local chapter', icon: MapPin, description: 'start a classic revival chapter at your school or community.', commitment: '3-8 hrs/week' },
-  { id: 'developer', title: 'developer', icon: Code, description: 'help build features and tools for the platform.', commitment: '5-15 hrs/week' },
+  { id: 'content', title: 'Content Contributor', icon: BookOpen, description: 'Write lecture notes and reading guides for classic works.', commitment: '5–10 hrs/week' },
+  { id: 'chapter', title: 'Local Chapter Lead', icon: MapPin, description: 'Start a Classic Revival chapter at your school or in your community.', commitment: '3–8 hrs/week' },
+  { id: 'developer', title: 'Developer', icon: Code, description: 'Help build features and tools for the platform and digital library.', commitment: '5–15 hrs/week' },
 ]
 
 export default function Apply() {
-  const { user, isLoggedIn } = useContext(AuthContext)
+  useReveal()
+  const { user } = useContext(AuthContext)
   const [selectedPosition, setSelectedPosition] = useState('')
   const [formData, setFormData] = useState({
     name: '',
@@ -36,11 +44,11 @@ export default function Apply() {
 
   const validateForm = () => {
     const newErrors = {}
-    if (!formData.name.trim()) newErrors.name = 'required'
-    if (!formData.email.trim()) newErrors.email = 'required'
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'invalid email'
-    if (!selectedPosition) newErrors.position = 'please select a position'
-    if (!formData.motivation.trim()) newErrors.motivation = 'please share your motivation'
+    if (!formData.name.trim()) newErrors.name = 'This field is required.'
+    if (!formData.email.trim()) newErrors.email = 'This field is required.'
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Please enter a valid email address.'
+    if (!selectedPosition) newErrors.position = 'Please select a position above.'
+    if (!formData.motivation.trim()) newErrors.motivation = 'Please share your motivation.'
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -48,11 +56,14 @@ export default function Apply() {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (validateForm()) {
+      const position = positions.find(p => p.id === selectedPosition)?.title || selectedPosition
       store.addApplication({
         ...formData,
-        position: positions.find(p => p.id === selectedPosition)?.title || selectedPosition,
+        position,
         userId: user?.id || null
       })
+      // Also deliver the application to the organization's inbox.
+      submitForm('team-application', { ...formData, position }).catch(() => {})
       setSubmitted(true)
     }
   }
@@ -60,18 +71,19 @@ export default function Apply() {
   if (submitted) {
     return (
       <>
-        <Head><title>application submitted | classic revival</title></Head>
+        <Seo title="Application Submitted" description="Thank you for applying to join the Classic Revival team." path="/apply" />
         <Navbar />
-        <main className="pt-16 min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-primary)' }}>
-          <div className="max-w-md mx-auto px-4 text-center animate-fadeInUp">
-            <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ background: 'rgba(45, 74, 62, 0.15)' }}>
-              <CheckCircle className="w-10 h-10" style={{ color: 'var(--forest)' }} />
+        <main id="main" className="pt-16 min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-primary)' }}>
+          <div className="max-w-md mx-auto px-4 text-center animate-fadeInUp py-24">
+            <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ background: 'rgba(47, 107, 79, 0.15)' }}>
+              <CheckCircle className="w-10 h-10" style={{ color: 'var(--success)' }} />
             </div>
-            <h1 className="font-display text-3xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>application submitted!</h1>
-            <p className="font-body mb-8" style={{ color: 'var(--text-secondary)' }}>
-              thank you for your interest in joining classic revival. we'll review your application and get back to you soon.
+            <h1 className="text-3xl mb-4">Application submitted</h1>
+            <p className="mb-8 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+              Thank you for your interest in joining Classic Revival. We read every
+              application and will get back to you soon.
             </p>
-            <Link href="/" className="btn-primary">return to home</Link>
+            <Link href="/" className="btn-primary">Return home</Link>
           </div>
         </main>
         <Footer />
@@ -81,104 +93,129 @@ export default function Apply() {
 
   return (
     <>
-      <Head><title>apply | classic revival</title></Head>
+      <Seo
+        title="Join the Team"
+        description="Apply to join Classic Revival — write reading guides, lead a local chapter, or help build the platform."
+        path="/apply"
+      />
       <Navbar />
 
-      <main className="pt-16 min-h-screen" style={{ background: 'var(--bg-primary)' }}>
-        <section className="py-12" style={{ background: 'linear-gradient(135deg, var(--navy) 0%, #142d4a 100%)' }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Link href="/#apply-section" className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-4 font-accent">
-              <ArrowLeft className="w-4 h-4" /> back
-            </Link>
-            <h1 className="font-display text-3xl md:text-4xl font-bold text-white mb-2">join our team</h1>
-            <p className="font-body text-white/80">be part of the movement to bring classic literature back to life.</p>
-          </div>
-        </section>
+      <main id="main" className="pt-16 min-h-screen" style={{ background: 'var(--bg-primary)' }}>
+        <PageHero
+          eyebrow="Get Involved"
+          title="Join the team"
+          lead="Classic Revival is built and run by students. If you want to shape the work itself — the guides, the chapters, the platform — this is the door."
+        />
 
-        <section className="py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-display text-xl font-bold mb-6 text-center" style={{ color: 'var(--text-primary)' }}>select a position</h2>
-            
-            <div className="grid md:grid-cols-3 gap-4 mb-12">
-              {positions.map((position) => {
-                const Icon = position.icon
-                const isSelected = selectedPosition === position.id
-                return (
-                  <button
-                    key={position.id}
-                    onClick={() => setSelectedPosition(position.id)}
-                    className="text-left p-5 rounded-xl transition-all"
-                    style={{
-                      background: isSelected ? 'rgba(114, 47, 55, 0.1)' : 'var(--bg-secondary)',
-                      border: `1px solid ${isSelected ? 'var(--burgundy)' : 'var(--border-color)'}`
-                    }}
-                  >
-                    <div 
-                      className="w-10 h-10 rounded-full flex items-center justify-center mb-3"
-                      style={{ 
-                        background: isSelected ? 'var(--burgundy)' : 'rgba(114, 47, 55, 0.1)',
-                        color: isSelected ? 'white' : 'var(--burgundy)'
+        <section className="py-16">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <fieldset className="mb-12">
+              <legend className="eyebrow mb-6">Step 1 — Choose a role</legend>
+              <div className="grid md:grid-cols-3 gap-5 reveal-stagger">
+                {positions.map((position) => {
+                  const Icon = position.icon
+                  const isSelected = selectedPosition === position.id
+                  return (
+                    <button
+                      key={position.id}
+                      type="button"
+                      onClick={() => setSelectedPosition(position.id)}
+                      aria-pressed={isSelected}
+                      className="card-classic text-left transition-all"
+                      style={{
+                        borderColor: isSelected ? 'var(--burgundy)' : 'var(--border-color)',
+                        boxShadow: isSelected ? '0 0 0 1px var(--burgundy)' : 'none',
+                        background: isSelected ? 'var(--card-hover)' : 'var(--card-bg)',
                       }}
                     >
-                      <Icon className="w-5 h-5" />
-                    </div>
-                    <h3 className="font-display text-lg font-bold mb-1" style={{ color: 'var(--text-primary)' }}>{position.title}</h3>
-                    <p className="font-body text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>{position.description}</p>
-                    <p className="font-accent text-xs" style={{ color: 'var(--text-secondary)' }}>{position.commitment}</p>
-                  </button>
-                )
-              })}
-            </div>
-            {errors.position && <p className="text-red-400 text-center mb-6 -mt-8">{errors.position}</p>}
+                      <span
+                        className="w-10 h-10 rounded-[2px] flex items-center justify-center mb-4"
+                        style={{
+                          background: isSelected ? 'var(--burgundy)' : 'rgba(74, 108, 148, 0.12)',
+                          color: isSelected ? '#fff' : 'var(--burgundy)',
+                        }}
+                      >
+                        <Icon className="w-5 h-5" aria-hidden="true" />
+                      </span>
+                      <span className="block font-display text-lg font-semibold mb-1.5" style={{ color: 'var(--text-primary)' }}>
+                        {position.title}
+                      </span>
+                      <span className="block text-sm leading-relaxed mb-3" style={{ color: 'var(--text-secondary)' }}>
+                        {position.description}
+                      </span>
+                      <span
+                        className="inline-block text-xs font-semibold uppercase tracking-[0.08em]"
+                        style={{ color: isSelected ? 'var(--burgundy)' : 'var(--text-secondary)' }}
+                      >
+                        {position.commitment}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+              {errors.position && <p className="form-error mt-4" role="alert">{errors.position}</p>}
+            </fieldset>
 
             <div className="max-w-2xl mx-auto">
-              <div className="rounded-xl p-6 md:p-8" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
-                <h2 className="font-display text-xl font-bold mb-6" style={{ color: 'var(--text-primary)' }}>application form</h2>
-                
-                <form onSubmit={handleSubmit} className="space-y-5">
-                  <div className="grid md:grid-cols-2 gap-4">
+              <div className="card-elevated p-6 md:p-8">
+                <div className="reveal">
+                  <p className="eyebrow mb-2">Step 2 — Tell us about yourself</p>
+                  <h2 className="text-2xl mb-8">Application</h2>
+                </div>
+
+                <form onSubmit={handleSubmit} noValidate className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-5">
                     <div>
-                      <label className="block font-accent text-sm mb-1" style={{ color: 'var(--text-secondary)' }}>full name *</label>
-                      <input type="text" name="name" value={formData.name} onChange={handleChange} className="input-classic text-sm" />
-                      {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
+                      <Label htmlFor="apply-name" className="form-label">
+                        Full name<span aria-hidden="true" style={{ color: 'var(--error)' }}> *</span>
+                      </Label>
+                      <Input id="apply-name" type="text" name="name" value={formData.name} onChange={handleChange} autoComplete="name" aria-invalid={errors.name ? true : undefined} />
+                      {errors.name && <p className="form-error" role="alert">{errors.name}</p>}
                     </div>
                     <div>
-                      <label className="block font-accent text-sm mb-1" style={{ color: 'var(--text-secondary)' }}>email *</label>
-                      <input type="email" name="email" value={formData.email} onChange={handleChange} className="input-classic text-sm" />
-                      {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
+                      <Label htmlFor="apply-email" className="form-label">
+                        Email<span aria-hidden="true" style={{ color: 'var(--error)' }}> *</span>
+                      </Label>
+                      <Input id="apply-email" type="email" name="email" value={formData.email} onChange={handleChange} autoComplete="email" aria-invalid={errors.email ? true : undefined} />
+                      {errors.email && <p className="form-error" role="alert">{errors.email}</p>}
                     </div>
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-4">
+                  <div className="grid md:grid-cols-2 gap-5">
                     <div>
-                      <label className="block font-accent text-sm mb-1" style={{ color: 'var(--text-secondary)' }}>phone</label>
-                      <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+1 (555) 123-4567" className="input-classic text-sm" />
+                      <Label htmlFor="apply-phone" className="form-label">Phone</Label>
+                      <Input id="apply-phone" type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+1 (555) 123-4567" autoComplete="tel" />
                     </div>
                     <div>
-                      <label className="block font-accent text-sm mb-1" style={{ color: 'var(--text-secondary)' }}>location</label>
-                      <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder="city, country" className="input-classic text-sm" />
+                      <Label htmlFor="apply-location" className="form-label">Location</Label>
+                      <Input id="apply-location" type="text" name="location" value={formData.location} onChange={handleChange} placeholder="City, country" autoComplete="address-level2" />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block font-accent text-sm mb-1" style={{ color: 'var(--text-secondary)' }}>relevant experience</label>
-                    <textarea name="experience" value={formData.experience} onChange={handleChange} rows={2} className="input-classic text-sm resize-none" placeholder="tell us about your experience..." />
+                    <Label htmlFor="apply-experience" className="form-label">Relevant experience</Label>
+                    <Textarea id="apply-experience" name="experience" value={formData.experience} onChange={handleChange} rows={3} className="resize-y" placeholder="Anything that shows how you work — school clubs, projects, writing, code." />
                   </div>
 
                   <div>
-                    <label className="block font-accent text-sm mb-1" style={{ color: 'var(--text-secondary)' }}>why do you want to join? *</label>
-                    <textarea name="motivation" value={formData.motivation} onChange={handleChange} rows={3} className="input-classic text-sm resize-none" placeholder="share your motivation..." />
-                    {errors.motivation && <p className="text-red-400 text-xs mt-1">{errors.motivation}</p>}
+                    <Label htmlFor="apply-motivation" className="form-label">
+                      Why do you want to join?<span aria-hidden="true" style={{ color: 'var(--error)' }}> *</span>
+                    </Label>
+                    <Textarea id="apply-motivation" name="motivation" value={formData.motivation} onChange={handleChange} rows={4} className="resize-y" placeholder="A few honest sentences are plenty." aria-invalid={errors.motivation ? true : undefined} />
+                    {errors.motivation && <p className="form-error" role="alert">{errors.motivation}</p>}
                   </div>
 
                   <div>
-                    <label className="block font-accent text-sm mb-1" style={{ color: 'var(--text-secondary)' }}>portfolio/linkedin</label>
-                    <input type="url" name="portfolio" value={formData.portfolio} onChange={handleChange} placeholder="https://..." className="input-classic text-sm" />
+                    <Label htmlFor="apply-portfolio" className="form-label">Portfolio / LinkedIn</Label>
+                    <Input id="apply-portfolio" type="url" name="portfolio" value={formData.portfolio} onChange={handleChange} placeholder="https://…" />
                   </div>
 
-                  <button type="submit" className="btn-primary w-full flex items-center justify-center gap-2">
-                    <Send className="w-5 h-5" /> submit application
-                  </button>
+                  <Button type="submit" className="w-full">
+                    Submit application
+                  </Button>
+                  <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+                    We only use what you share here to consider your application. We never publish or sell it.
+                  </p>
                 </form>
               </div>
             </div>

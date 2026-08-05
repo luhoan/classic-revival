@@ -67,7 +67,7 @@ export default function AdminUsers() {
 
         <section className="py-8">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="rounded-xl p-6" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+            <div className="rounded-[3px] p-6" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
@@ -84,7 +84,7 @@ export default function AdminUsers() {
                       <tr key={u.id} className="border-b" style={{ borderColor: 'var(--border-color)' }}>
                         <td className="py-3 px-2">
                           <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: u.isAdmin ? 'rgba(201, 162, 39, 0.2)' : 'rgba(114, 47, 55, 0.15)' }}>
+                            <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: u.isAdmin ? 'rgba(201, 162, 39, 0.2)' : 'rgba(74, 108, 148, 0.15)' }}>
                               <span className="font-accent font-bold text-xs" style={{ color: u.isAdmin ? 'var(--gold)' : 'var(--burgundy)' }}>
                                 {u.name?.charAt(0).toUpperCase() || u.username?.charAt(0).toUpperCase()}
                               </span>
@@ -102,7 +102,7 @@ export default function AdminUsers() {
                               <Crown className="w-3 h-3" /> Master Admin
                             </span>
                           ) : u.isAdmin ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-accent" style={{ background: 'rgba(114, 47, 55, 0.15)', color: 'var(--burgundy)' }}>
+                            <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-accent" style={{ background: 'rgba(74, 108, 148, 0.15)', color: 'var(--burgundy)' }}>
                               <Shield className="w-3 h-3" /> Admin
                             </span>
                           ) : (

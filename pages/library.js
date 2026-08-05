@@ -6,7 +6,10 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { ThemeContext, AuthContext } from './_app'
 import { store, getBookDesign } from '../lib/store'
-import { Search, BookOpen, X, Star, Download, MessageCircle, FileText, ChevronRight, Clock, Calendar } from 'lucide-react'
+import { getResourcesForBook } from '../lib/content/bookResources'
+import { displayTitle } from '../lib/displayTitle'
+import { Search, BookOpen, X, Star, Download, MessageCircle, GraduationCap, ChevronRight, ExternalLink, Calendar } from 'lucide-react'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs'
 
 const genres = ['All', 'Fiction', 'Philosophy', 'Drama', 'Poetry', 'History', 'Biography', 'Epic', 'Religion', 'Politics', 'Science', 'Literature', 'Psychology', 'Romance', 'Classic']
 
@@ -19,8 +22,9 @@ const darkBookColors = [
 function Book({ book, isHovered, onHover, onLeave, onClick, hoveredBookInShelf }) {
   const design = getBookDesign(book.id, book.pages)
   const bookColor = darkBookColors[(book.id - 1) % darkBookColors.length]
-  const baseWidth = Math.max(28, Math.min(50, Math.floor((book.pages || 400) / 20)))
+  const baseWidth = Math.max(32, Math.min(54, Math.floor((book.pages || 400) / 18)))
   const height = design.height || 220
+  const spineTitle = displayTitle(book.title)
   const shouldOffset = hoveredBookInShelf !== null && hoveredBookInShelf !== book.id
   
   return (
@@ -36,14 +40,14 @@ function Book({ book, isHovered, onHover, onLeave, onClick, hoveredBookInShelf }
     >
       {isHovered && (
         <div 
-          className="absolute left-1/2 z-[110] book-preview-popup rounded-xl overflow-hidden animate-previewSlideIn"
+          className="absolute left-1/2 z-[110] book-preview-popup rounded-[3px] overflow-hidden animate-previewSlideIn"
           style={{ bottom: `${height + 50}px`, width: '240px', transform: 'translateX(-50%)' }}
         >
           <div className="p-4 relative" style={{ background: bookColor }}>
             <div className="flex items-start gap-3">
               <div className="w-8 h-24 rounded-sm flex-shrink-0 leather-texture" style={{ background: `linear-gradient(135deg, ${bookColor} 0%, rgba(0,0,0,0.3) 100%)`, boxShadow: 'inset -2px 0 6px rgba(0,0,0,0.4)' }} />
               <div className="flex-1 min-w-0">
-                <h3 className="font-display font-bold text-white text-sm leading-tight mb-1 truncate">{book.title}</h3>
+                <h3 className="font-display font-bold text-sm leading-tight mb-1 truncate" style={{ color: '#fff' }}>{spineTitle}</h3>
                 <p className="text-white/70 text-xs mb-2">{book.author}</p>
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-1">
@@ -60,9 +64,9 @@ function Book({ book, isHovered, onHover, onLeave, onClick, hoveredBookInShelf }
             <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--text-secondary)' }}>
               <Calendar className="w-3 h-3" />
               <span>{book.year < 0 ? `${Math.abs(book.year)} BCE` : book.year}</span>
-              <span className="px-1.5 py-0.5 rounded text-[10px]" style={{ background: 'rgba(114, 47, 55, 0.15)', color: 'var(--burgundy)' }}>{book.genre}</span>
+              <span className="px-1.5 py-0.5 rounded text-[10px]" style={{ background: 'rgba(74, 108, 148, 0.15)', color: 'var(--burgundy)' }}>{book.genre}</span>
             </div>
-            <button onClick={(e) => { e.stopPropagation(); onClick(); }} className="w-full py-2 rounded-lg text-xs font-accent font-semibold transition-all hover:opacity-90" style={{ background: 'var(--burgundy)', color: 'white' }}>view details</button>
+            <button onClick={(e) => { e.stopPropagation(); onClick(); }} className="w-full py-2 rounded-[2px] text-xs font-accent font-semibold transition-all hover:opacity-90" style={{ background: 'var(--burgundy)', color: 'white' }}>View details</button>
           </div>
           <div className="absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45" style={{ background: 'var(--bg-secondary)', borderRight: '1px solid rgba(201, 162, 39, 0.2)', borderBottom: '1px solid rgba(201, 162, 39, 0.2)' }} />
         </div>
@@ -93,8 +97,8 @@ function Book({ book, isHovered, onHover, onLeave, onClick, hoveredBookInShelf }
             </>
           )}
           <div className="absolute inset-0 flex items-center justify-center px-1" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
-            <span className="font-accent text-white/90 font-semibold text-center leading-tight truncate" style={{ fontSize: baseWidth < 35 ? '8px' : '9px', textShadow: '0 1px 3px rgba(0,0,0,0.8)', maxHeight: `${height - 40}px` }}>
-              {book.title.length > 35 ? book.title.substring(0, 33) + '...' : book.title}
+            <span className="font-display text-white/95 font-medium text-center leading-tight truncate" style={{ fontSize: baseWidth < 38 ? '10px' : '11px', letterSpacing: '0.03em', textShadow: '0 1px 3px rgba(0,0,0,0.85)', maxHeight: `${height - 44}px` }}>
+              {spineTitle.length > 28 ? spineTitle.substring(0, 26) + '…' : spineTitle}
             </span>
           </div>
         </div>
@@ -128,30 +132,32 @@ function BookPreviewModal({ book, onClose }) {
   }
 
   const bookColor = darkBookColors[(book.id - 1) % darkBookColors.length]
+  const cleanTitle = displayTitle(book.title)
+  const studyResources = getResourcesForBook(book.title, book.author)
   const tabs = [
-    { id: 'overview', label: 'overview', icon: BookOpen },
-    { id: 'lectures', label: 'lectures', icon: FileText },
-    { id: 'discussions', label: 'discuss', icon: MessageCircle },
-    { id: 'download', label: 'download', icon: Download },
+    { id: 'overview', label: 'Overview', icon: BookOpen },
+    { id: 'resources', label: 'Resources', icon: GraduationCap },
+    { id: 'discussions', label: 'Discuss', icon: MessageCircle },
+    { id: 'download', label: 'Download', icon: Download },
   ]
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop" onClick={onClose}>
-      <div className="w-full max-w-2xl max-h-[85vh] overflow-hidden rounded-xl animate-fadeInUp" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }} onClick={e => e.stopPropagation()}>
+      <div className="w-full max-w-2xl max-h-[85vh] overflow-hidden rounded-[3px] animate-fadeInUp" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }} onClick={e => e.stopPropagation()}>
         <div className="relative p-6" style={{ background: bookColor }}>
-          <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"><X className="w-5 h-5 text-white" /></button>
+          <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-[2px] bg-white/10 hover:bg-white/20 transition-colors"><X className="w-5 h-5 text-white" /></button>
           <div className="flex gap-5">
             <div className="w-12 h-40 rounded-sm flex-shrink-0 leather-texture" style={{ background: `linear-gradient(135deg, ${bookColor} 0%, rgba(255,255,255,0.05) 50%, ${bookColor} 100%)`, boxShadow: 'inset -4px 0 10px rgba(0,0,0,0.4), 4px 4px 15px rgba(0,0,0,0.4)' }} />
             <div className="text-white flex-1">
               <span className="inline-block px-2 py-0.5 bg-white/20 rounded text-xs font-accent mb-2">{book.genre}</span>
-              <h2 className="font-display text-2xl font-bold mb-1">{book.title}</h2>
+              <h2 className="font-display text-2xl font-bold mb-1" style={{ color: '#fff' }}>{cleanTitle}</h2>
               <p className="font-accent text-white/80 mb-3">by {book.author}</p>
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1"><Star className="w-4 h-4 fill-current" style={{ color: 'var(--gold)' }} /><span className="font-bold">{avgRating || '—'}</span></div>
                 {isLoggedIn && (
                   <div className="relative">
                     <button onClick={() => setShowRatingSlider(!showRatingSlider)} className="text-xs px-2 py-1 bg-white/20 rounded hover:bg-white/30 flex items-center gap-1">
-                      {userRating ? `your: ${userRating}` : 'rate'}<ChevronRight className={`w-3 h-3 transition-transform ${showRatingSlider ? 'rotate-180' : ''}`} />
+                      {userRating ? `Your: ${userRating}` : 'Rate'}<ChevronRight className={`w-3 h-3 transition-transform ${showRatingSlider ? 'rotate-180' : ''}`} />
                     </button>
                     {showRatingSlider && (
                       <div className="absolute left-full top-0 ml-2 flex items-center gap-1 p-2 rounded-lg animate-fadeIn" style={{ background: 'rgba(0,0,0,0.8)' }}>
@@ -164,18 +170,63 @@ function BookPreviewModal({ book, onClose }) {
             </div>
           </div>
         </div>
-        <div className="flex border-b overflow-x-auto" style={{ borderColor: 'var(--border-color)', background: 'var(--bg-tertiary)' }}>
-          {tabs.map(tab => (<button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`book-tab flex items-center gap-2 whitespace-nowrap ${activeTab === tab.id ? 'active' : ''}`}><tab.icon className="w-4 h-4" />{tab.label}</button>))}
-        </div>
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="border-b overflow-x-auto justify-start gap-0 rounded-none" style={{ borderColor: 'var(--border-color)', background: 'var(--bg-tertiary)' }}>
+          {tabs.map(tab => (<TabsTrigger key={tab.id} value={tab.id} className="book-tab flex items-center gap-2 whitespace-nowrap shrink-0"><tab.icon className="w-4 h-4" />{tab.label}</TabsTrigger>))}
+        </TabsList>
         <div className="p-6 overflow-y-auto" style={{ maxHeight: '280px' }}>
-          {activeTab === 'overview' && (<p className="font-body leading-relaxed" style={{ color: 'var(--text-secondary)' }}>a classic work of literature published in {book.year < 0 ? `${Math.abs(book.year)} BCE` : book.year}. this {book.pages || 400}-page masterpiece continues to captivate readers.</p>)}
-          {activeTab === 'lectures' && (<div className="space-y-3">{['introduction & context', 'major themes', 'character analysis', 'literary techniques', 'legacy'].map((l, i) => (<div key={i} className="flex items-center justify-between p-3 rounded-lg" style={{ background: 'var(--bg-tertiary)' }}><div className="flex items-center gap-3"><span className="w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold" style={{ background: 'rgba(114, 47, 55, 0.15)', color: 'var(--burgundy)' }}>{i + 1}</span><span className="font-accent text-sm" style={{ color: 'var(--text-primary)' }}>{l}</span></div><ChevronRight className="w-4 h-4" style={{ color: 'var(--text-secondary)' }} /></div>))}</div>)}
-          {activeTab === 'discussions' && (<div className="text-center py-6"><MessageCircle className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--text-secondary)', opacity: 0.4 }} /><p className="font-body text-sm mb-3" style={{ color: 'var(--text-secondary)' }}>join the discussion</p><Link href={`/book/${book.id}?tab=discussions`} className="inline-block px-4 py-2 rounded-lg font-accent text-sm" style={{ background: 'rgba(114, 47, 55, 0.15)', color: 'var(--burgundy)' }}>view discussions</Link></div>)}
-          {activeTab === 'download' && (<div className="space-y-3">{['PDF', 'EPUB', 'Audio'].map((f, i) => (<button key={i} className="w-full flex items-center justify-between p-3 rounded-lg" style={{ background: 'var(--bg-tertiary)' }}><div className="flex items-center gap-3"><Download className="w-5 h-5" style={{ color: 'var(--burgundy)' }} /><span className="font-accent text-sm" style={{ color: 'var(--text-primary)' }}>{f}</span></div><span className="text-xs" style={{ color: 'var(--text-secondary)' }}>free</span></button>))}</div>)}
+          <TabsContent value="overview">{(
+            <div className="space-y-3">
+              <p className="font-body leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                {cleanTitle !== book.title && (<><span className="italic">{book.title}</span>{' — '}</>)}
+                {book.author}, {book.year < 0 ? `${Math.abs(book.year)} BCE` : book.year} · {book.genre.toLowerCase()} · {book.pages || 400} pages.
+              </p>
+              {studyResources && (
+                <p className="font-body text-sm" style={{ color: 'var(--text-secondary)' }}>
+                  {studyResources.resources.length} study resource{studyResources.resources.length === 1 ? '' : 's'} available — full texts, audiobooks, guides, and lectures.
+                </p>
+              )}
+            </div>
+          )}</TabsContent>
+          <TabsContent value="resources">{(
+            <div className="space-y-2">
+              {studyResources ? (
+                <>
+                  {studyResources.resources.slice(0, 5).map((r, i) => {
+                    let host = ''
+                    try { host = new URL(r.url).hostname.replace(/^www\./, '') } catch {}
+                    return (
+                      <a key={i} href={r.url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between gap-3 p-3 rounded-[2px] transition-colors hover:opacity-90" style={{ background: 'var(--bg-tertiary)' }}>
+                        <div className="flex items-center gap-3 min-w-0">
+                          <GraduationCap className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--burgundy)' }} />
+                          <span className="font-accent text-sm truncate" style={{ color: 'var(--text-primary)' }}>{r.label}</span>
+                        </div>
+                        <span className="flex items-center gap-1.5 text-xs flex-shrink-0" style={{ color: 'var(--text-secondary)' }}>{host}<ExternalLink className="w-3 h-3" /></span>
+                      </a>
+                    )
+                  })}
+                  {studyResources.resources.length > 5 && (
+                    <Link href={`/book/${book.id}?tab=resources`} className="block text-center font-accent text-sm py-2" style={{ color: 'var(--burgundy)' }}>
+                      All {studyResources.resources.length} resources →
+                    </Link>
+                  )}
+                </>
+              ) : (
+                <div className="text-center py-6">
+                  <GraduationCap className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--text-secondary)', opacity: 0.4 }} />
+                  <p className="font-body text-sm mb-3" style={{ color: 'var(--text-secondary)' }}>Resources for this book live on its full page</p>
+                  <Link href={`/book/${book.id}?tab=resources`} className="inline-block px-4 py-2 rounded-[2px] font-accent text-sm" style={{ background: 'rgba(74, 108, 148, 0.15)', color: 'var(--burgundy)' }}>View book page</Link>
+                </div>
+              )}
+            </div>
+          )}</TabsContent>
+          <TabsContent value="discussions"><div className="text-center py-6"><MessageCircle className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--text-secondary)', opacity: 0.4 }} /><p className="font-body text-sm mb-3" style={{ color: 'var(--text-secondary)' }}>Join the discussion</p><Link href={`/book/${book.id}?tab=discussions`} className="inline-block px-4 py-2 rounded-[2px] font-accent text-sm" style={{ background: 'rgba(74, 108, 148, 0.15)', color: 'var(--burgundy)' }}>view discussions</Link></div></TabsContent>
+          <TabsContent value="download"><div className="space-y-3">{['PDF', 'EPUB', 'Audio'].map((f, i) => (<button key={i} className="w-full flex items-center justify-between p-3 rounded-[2px]" style={{ background: 'var(--bg-tertiary)' }}><div className="flex items-center gap-3"><Download className="w-5 h-5" style={{ color: 'var(--burgundy)' }} /><span className="font-accent text-sm" style={{ color: 'var(--text-primary)' }}>{f}</span></div><span className="text-xs" style={{ color: 'var(--text-secondary)' }}>free</span></button>))}</div></TabsContent>
         </div>
+        </Tabs>
         <div className="p-4 border-t flex justify-end gap-3" style={{ borderColor: 'var(--border-color)' }}>
-          <button onClick={onClose} className="px-4 py-2 rounded-lg font-accent text-sm" style={{ color: 'var(--text-secondary)' }}>close</button>
-          <Link href={`/book/${book.id}`} className="btn-primary text-sm py-2">view full page</Link>
+          <button onClick={onClose} className="px-4 py-2 rounded-[2px] font-accent text-sm" style={{ color: 'var(--text-secondary)' }}>Close</button>
+          <Link href={`/book/${book.id}`} className="btn-primary text-sm py-2">View Full Page</Link>
         </div>
       </div>
     </div>
