@@ -7,15 +7,10 @@ import Footer from '../../components/Footer'
 import BookReader from '../../components/BookReader'
 import { ThemeContext, AuthContext } from '../_app'
 import { store } from '../../lib/store'
-import { ArrowLeft, BookOpen, Clock, Calendar, FileText, Download, Star, MessageCircle, ChevronRight, ChevronLeft, Send, Trash2, User, Book } from 'lucide-react'
-
-const defaultLectures = [
-  { id: 1, title: 'Introduction & Historical Context', duration: '45 min', content: 'An overview of the author\'s life and the historical period.' },
-  { id: 2, title: 'Major Themes and Motifs', duration: '60 min', content: 'Exploring the central themes of the narrative.' },
-  { id: 3, title: 'Character Analysis', duration: '55 min', content: 'A deep examination of the main characters.' },
-  { id: 4, title: 'Literary Techniques', duration: '50 min', content: 'Understanding the author\'s use of language.' },
-  { id: 5, title: 'Critical Reception & Legacy', duration: '40 min', content: 'How this work was received and its influence.' },
-]
+import { getResourcesForBook, masterGuides } from '../../lib/content/bookResources'
+import { displayTitle } from '../../lib/displayTitle'
+import { ArrowLeft, BookOpen, Calendar, FileText, Download, Star, MessageCircle, ChevronRight, ChevronLeft, Send, Trash2, User, Book, GraduationCap, ExternalLink } from 'lucide-react'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '../../components/ui/tabs'
 
 export default function BookPage() {
   const router = useRouter()
@@ -55,7 +50,7 @@ export default function BookPage() {
         setLoadingContent(false)
       })
     }
-    if (tab) setActiveTab(tab)
+    if (tab) setActiveTab(tab === 'lectures' ? 'resources' : tab)
   }, [id, tab, user])
 
   const handleRate = (rating) => {
@@ -118,12 +113,16 @@ export default function BookPage() {
     )
   }
 
+  const studyResources = getResourcesForBook(book.title, book.author)
+
   const tabs = [
     { id: 'read', label: 'Read', icon: Book },
-    { id: 'lectures', label: 'Lectures', icon: FileText },
+    { id: 'resources', label: 'Study Resources', icon: GraduationCap, count: studyResources?.resources.length || 0 },
     { id: 'discussions', label: 'Discussions', icon: MessageCircle, count: discussions.length },
     { id: 'download', label: 'Download', icon: Download },
   ]
+
+  const cleanTitle = displayTitle(book.title)
 
   return (
     <>
@@ -144,14 +143,17 @@ export default function BookPage() {
                 style={{ background: book.color, boxShadow: 'inset -5px 0 15px rgba(0,0,0,0.3), 6px 6px 20px rgba(0,0,0,0.4)' }}
               >
                 <span className="font-accent text-white text-[10px] font-semibold text-center px-1" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
-                  {book.title}
+                  {cleanTitle}
                 </span>
               </div>
 
               <div className="flex-1 text-white">
-                <span className="inline-block px-2 py-0.5 bg-white/20 rounded text-xs font-accent mb-2">{book.genre}</span>
-                <h1 className="font-display text-3xl md:text-4xl font-bold mb-1">{book.title}</h1>
-                <p className="font-accent text-lg text-white/80 mb-3">by {book.author}</p>
+                <span className="inline-block px-2 py-0.5 bg-white/20 rounded-[2px] text-xs font-accent mb-2">{book.genre}</span>
+                <h1 className="font-display text-3xl md:text-4xl font-bold mb-1" style={{ color: '#fff' }}>{cleanTitle}</h1>
+                <p className="font-accent text-lg text-white/80 mb-1">by {book.author}</p>
+                {cleanTitle !== book.title && (
+                  <p className="text-white/50 text-xs mb-3 italic">Full title: {book.title}</p>
+                )}
                 
                 {/* Rating */}
                 <div className="flex items-center gap-4 mb-4">
@@ -167,7 +169,7 @@ export default function BookPage() {
                   
                   {isLoggedIn && (
                     <div className="relative">
-                      <button onClick={() => setShowRatingSlider(!showRatingSlider)} className="text-sm px-3 py-1.5 bg-white/20 rounded-full hover:bg-white/30 flex items-center gap-1">
+                      <button onClick={() => setShowRatingSlider(!showRatingSlider)} className="text-sm px-3 py-1.5 bg-white/20 rounded-[2px] hover:bg-white/30 flex items-center gap-1">
                         {userRating ? `Your: ${userRating}★` : 'Rate'}
                         <ChevronRight className={`w-3 h-3 transition-transform ${showRatingSlider ? 'rotate-90' : ''}`} />
                       </button>
@@ -197,24 +199,27 @@ export default function BookPage() {
           </div>
         </section>
 
-        {/* Tabs */}
+        {/* Tabs — Radix tablist (arrow-key navigation, proper ARIA),
+            styled with the existing .book-tab underline register. */}
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
         <section className="border-b sticky top-16 z-30" style={{ borderColor: 'var(--border-color)', background: 'var(--bg-secondary)' }}>
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex gap-1">
+            <TabsList className="gap-1 overflow-x-auto justify-start">
               {tabs.map(t => (
-                <button key={t.id} onClick={() => setActiveTab(t.id)} className={`book-tab flex items-center gap-2 ${activeTab === t.id ? 'active' : ''}`}>
+                <TabsTrigger key={t.id} value={t.id} className="book-tab flex items-center gap-2 whitespace-nowrap shrink-0">
                   <t.icon className="w-4 h-4" /> {t.label}
-                  {t.count > 0 && <span className="ml-1 px-1.5 py-0.5 rounded-full text-xs" style={{ background: 'rgba(114, 47, 55, 0.2)', color: 'var(--burgundy)' }}>{t.count}</span>}
-                </button>
+                  {t.count > 0 && <span className="ml-1 px-1.5 py-0.5 rounded-full text-xs" style={{ background: 'rgba(74, 108, 148, 0.2)', color: 'var(--burgundy)' }}>{t.count}</span>}
+                </TabsTrigger>
               ))}
-            </div>
+            </TabsList>
           </div>
         </section>
 
         {/* Content */}
         <section className="py-10">
           <div className={activeTab === 'read' ? '' : 'max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'}>
-            {activeTab === 'read' && (
+            <TabsContent value="read">
+            {(
               loadingContent ? (
                 <div className="flex items-center justify-center py-20">
                   <div className="text-center">
@@ -238,73 +243,117 @@ export default function BookPage() {
                 </div>
               )
             )}
+            </TabsContent>
 
-            {activeTab === 'lectures' && (
+            <TabsContent value="resources">
               <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div>
-                <h2 className="font-display text-2xl font-bold mb-6" style={{ color: 'var(--text-primary)' }}>Lecture Notes</h2>
+                <div>
+                  <h2 className="font-display text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>Study Resources</h2>
+                  <p className="font-body mb-6" style={{ color: 'var(--text-secondary)' }}>
+                    {studyResources
+                      ? `Hand-picked ways into ${cleanTitle} — full texts, audiobooks, study guides, and open university lectures.`
+                      : 'We haven’t added dedicated resources for this book yet, but our full resource library below is a good place to start.'}
+                  </p>
 
-                {/* External Resources Section */}
-                {bookContent?.external_resources && bookContent.external_resources.length > 0 && (
-                  <div className="mb-8">
-                    <h3 className="font-display text-xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>External Resources</h3>
-                    <div className="space-y-3">
-                      {bookContent.external_resources.map((resource, index) => (
+                  {studyResources?.section && (
+                    <p className="font-accent text-sm mb-6" style={{ color: 'var(--burgundy)' }}>
+                      From the Classic Revival reading path: {studyResources.section}
+                    </p>
+                  )}
+
+                  {studyResources && (
+                    <ul className="space-y-3 mb-10 list-none">
+                      {studyResources.resources.map((resource, index) => {
+                        let host = ''
+                        try { host = new URL(resource.url).hostname.replace(/^www\./, '') } catch {}
+                        return (
+                          <li key={index}>
+                            <a
+                              href={resource.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="block p-4 rounded-[3px] hover:shadow-lg transition-all"
+                              style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}
+                            >
+                              <div className="flex items-center gap-3">
+                                <GraduationCap className="w-5 h-5 flex-shrink-0" style={{ color: 'var(--burgundy)' }} />
+                                <div className="flex-1 min-w-0">
+                                  <p className="font-accent text-sm font-semibold truncate" style={{ color: 'var(--text-primary)' }}>{resource.label}</p>
+                                  {host && <p className="text-xs truncate" style={{ color: 'var(--text-secondary)' }}>{host}</p>}
+                                </div>
+                                <ExternalLink className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--text-secondary)' }} />
+                              </div>
+                            </a>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  )}
+
+                  {bookContent?.external_resources && bookContent.external_resources.length > 0 && (
+                    <div className="mb-10">
+                      <h3 className="font-display text-lg font-bold mb-4" style={{ color: 'var(--text-primary)' }}>More links for this edition</h3>
+                      <ul className="space-y-3 list-none">
+                        {bookContent.external_resources.map((resource, index) => {
+                          let host = ''
+                          try { host = new URL(resource).hostname.replace(/^www\./, '') } catch {}
+                          return (
+                            <li key={index}>
+                              <a
+                                href={resource}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block p-4 rounded-[3px] hover:shadow-lg transition-all"
+                                style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}
+                              >
+                                <div className="flex items-center gap-3">
+                                  <FileText className="w-5 h-5 flex-shrink-0" style={{ color: 'var(--burgundy)' }} />
+                                  <p className="flex-1 min-w-0 font-accent text-sm truncate" style={{ color: 'var(--text-primary)' }}>{host || resource}</p>
+                                  <ExternalLink className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--text-secondary)' }} />
+                                </div>
+                              </a>
+                            </li>
+                          )
+                        })}
+                      </ul>
+                    </div>
+                  )}
+
+                  <div className="p-5 rounded-[3px]" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+                    <h3 className="font-display text-lg font-bold mb-1" style={{ color: 'var(--text-primary)' }}>Browse the full Classic Revival resource library</h3>
+                    <p className="font-body text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
+                      Every book in our curriculum, with reading paths and resources for each work.
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                      {masterGuides.map((guide, index) => (
                         <a
                           key={index}
-                          href={resource}
+                          href={guide.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="block p-4 rounded-xl hover:shadow-lg transition-all"
-                          style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}
+                          className="inline-flex items-center gap-2 px-4 py-2 rounded-[2px] font-accent text-sm transition-all hover:opacity-90"
+                          style={{ background: 'var(--burgundy)', color: 'white' }}
                         >
-                          <div className="flex items-center gap-3">
-                            <FileText className="w-5 h-5 flex-shrink-0" style={{ color: 'var(--burgundy)' }} />
-                            <div className="flex-1 min-w-0">
-                              <p className="font-accent text-sm truncate" style={{ color: 'var(--text-primary)' }}>{resource}</p>
-                            </div>
-                            <ChevronRight className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--text-secondary)' }} />
-                          </div>
+                          <BookOpen className="w-4 h-4" />
+                          {guide.label}
                         </a>
                       ))}
                     </div>
                   </div>
-                )}
-
-                <div className="space-y-4">
-                  {defaultLectures.map((lecture, index) => (
-                    <div key={lecture.id} className="p-5 rounded-xl" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
-                      <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(114, 47, 55, 0.15)', color: 'var(--burgundy)' }}>
-                          <span className="font-display font-bold">{index + 1}</span>
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between gap-4">
-                            <h3 className="font-display font-bold" style={{ color: 'var(--text-primary)' }}>{lecture.title}</h3>
-                            <span className="flex items-center gap-1 text-sm flex-shrink-0" style={{ color: 'var(--text-secondary)' }}>
-                              <Clock className="w-4 h-4" /> {lecture.duration}
-                            </span>
-                          </div>
-                          <p className="font-body mt-2 text-sm" style={{ color: 'var(--text-secondary)' }}>{lecture.content}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
                 </div>
               </div>
-              </div>
-            )}
+            </TabsContent>
 
-            {activeTab === 'discussions' && (
+            <TabsContent value="discussions">
               <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
               <div>
                 <h2 className="font-display text-2xl font-bold mb-6" style={{ color: 'var(--text-primary)' }}>Discussions</h2>
                 
                 {isLoggedIn ? (
                   <form onSubmit={handlePostDiscussion} className="mb-8">
-                    <div className="p-4 rounded-xl" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+                    <div className="p-4 rounded-[3px]" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
                       <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(114, 47, 55, 0.15)' }}>
+                        <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(74, 108, 148, 0.15)' }}>
                           <User className="w-5 h-5" style={{ color: 'var(--burgundy)' }} />
                         </div>
                         <div className="flex-1">
@@ -319,16 +368,16 @@ export default function BookPage() {
                     </div>
                   </form>
                 ) : (
-                  <div className="p-6 rounded-xl text-center mb-8" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+                  <div className="p-6 rounded-[3px] text-center mb-8" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
                     <p className="font-body" style={{ color: 'var(--text-secondary)' }}>Sign in to join the discussion</p>
                   </div>
                 )}
 
                 <div className="space-y-4">
                   {discussions.length > 0 ? discussions.map(discussion => (
-                    <div key={discussion.id} className="p-5 rounded-xl" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+                    <div key={discussion.id} className="p-5 rounded-[3px]" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
                       <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(114, 47, 55, 0.15)' }}>
+                        <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(74, 108, 148, 0.15)' }}>
                           <span className="font-accent font-bold text-sm" style={{ color: 'var(--burgundy)' }}>{discussion.userName?.charAt(0).toUpperCase()}</span>
                         </div>
                         <div className="flex-1">
@@ -349,7 +398,7 @@ export default function BookPage() {
                             <div className="mt-4 pl-4 border-l-2 space-y-3" style={{ borderColor: 'var(--border-color)' }}>
                               {discussion.replies.map(reply => (
                                 <div key={reply.id} className="flex items-start gap-2">
-                                  <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(114, 47, 55, 0.1)' }}>
+                                  <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(74, 108, 148, 0.1)' }}>
                                     <span className="font-accent font-bold text-xs" style={{ color: 'var(--burgundy)' }}>{reply.userName?.charAt(0).toUpperCase()}</span>
                                   </div>
                                   <div className="flex-1">
@@ -372,8 +421,8 @@ export default function BookPage() {
                             <div className="mt-3">
                               {replyTo === discussion.id ? (
                                 <div className="flex items-center gap-2">
-                                  <input type="text" value={replyText} onChange={(e) => setReplyText(e.target.value)} placeholder="Reply..." className="flex-1 px-3 py-2 rounded-lg text-sm" style={{ background: 'var(--bg-tertiary)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }} autoFocus />
-                                  <button onClick={() => handlePostReply(discussion.id)} className="p-2 rounded-lg" style={{ background: 'var(--burgundy)', color: 'white' }}><Send className="w-4 h-4" /></button>
+                                  <input type="text" value={replyText} onChange={(e) => setReplyText(e.target.value)} placeholder="Reply..." className="flex-1 px-3 py-2 rounded-[2px] text-sm" style={{ background: 'var(--bg-tertiary)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }} autoFocus />
+                                  <button onClick={() => handlePostReply(discussion.id)} className="p-2 rounded-[2px]" style={{ background: 'var(--burgundy)', color: 'white' }}><Send className="w-4 h-4" /></button>
                                   <button onClick={() => { setReplyTo(null); setReplyText(''); }} style={{ color: 'var(--text-secondary)' }}>Cancel</button>
                                 </div>
                               ) : (
@@ -393,23 +442,23 @@ export default function BookPage() {
                 </div>
               </div>
               </div>
-            )}
+            </TabsContent>
 
-            {activeTab === 'download' && (
+            <TabsContent value="download">
               <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
               <div>
                 <h2 className="font-display text-2xl font-bold mb-6" style={{ color: 'var(--text-primary)' }}>Download & Resources</h2>
 
                 {/* Project Gutenberg Link */}
                 {(book?.gutenberg_url || bookContent?.gutenberg_url) && (
-                  <div className="mb-6 p-4 rounded-xl" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+                  <div className="mb-6 p-4 rounded-[3px]" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
                     <h3 className="font-display font-bold mb-2" style={{ color: 'var(--text-primary)' }}>Project Gutenberg</h3>
                     <p className="text-sm mb-3" style={{ color: 'var(--text-secondary)' }}>Access various formats and more information</p>
                     <a
                       href={book?.gutenberg_url || bookContent?.gutenberg_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-accent text-sm transition-all"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-[2px] font-accent text-sm transition-all"
                       style={{ background: 'var(--burgundy)', color: 'white' }}
                     >
                       <Download className="w-4 h-4" />
@@ -429,7 +478,7 @@ export default function BookPage() {
                           href={resource}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="block p-4 rounded-xl hover:shadow-lg transition-all"
+                          className="block p-4 rounded-[3px] hover:shadow-lg transition-all"
                           style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}
                         >
                           <div className="flex items-center gap-3">
@@ -449,7 +498,7 @@ export default function BookPage() {
                 <h3 className="font-display text-xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>Download Formats</h3>
                 <div className="grid md:grid-cols-3 gap-4">
                   {['PDF', 'EPUB', 'Audio'].map((format, i) => (
-                    <button key={i} className="p-6 rounded-xl text-left hover:shadow-lg transition-all" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+                    <button key={i} className="p-6 rounded-[3px] text-left hover:shadow-lg transition-all" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
                       <Download className="w-8 h-8 mb-3" style={{ color: 'var(--burgundy)' }} />
                       <h3 className="font-display font-bold mb-1" style={{ color: 'var(--text-primary)' }}>{format}</h3>
                       <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Free</p>
@@ -458,9 +507,10 @@ export default function BookPage() {
                 </div>
               </div>
               </div>
-            )}
+            </TabsContent>
           </div>
         </section>
+        </Tabs>
       </main>
       <Footer />
     </>

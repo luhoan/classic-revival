@@ -113,7 +113,7 @@ export default function AuthModal({ isOpen, onClose, mode, setMode }) {
       onClick={onClose}
     >
       <div 
-        className="w-full max-w-md rounded-xl shadow-2xl overflow-hidden animate-fadeInUp"
+        className="w-full max-w-md rounded-[3px] shadow-2xl overflow-hidden animate-fadeInUp"
         style={{ background: 'var(--bg-secondary)' }}
         onClick={e => e.stopPropagation()}
       >
@@ -121,7 +121,7 @@ export default function AuthModal({ isOpen, onClose, mode, setMode }) {
         <div className="relative bg-gradient-to-r from-burgundy to-burgundy-dark p-6 text-white" style={{ background: 'linear-gradient(135deg, var(--burgundy) 0%, var(--burgundy-dark) 100%)' }}>
           <button 
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-lg transition-colors"
+            className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-[2px] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -138,7 +138,7 @@ export default function AuthModal({ isOpen, onClose, mode, setMode }) {
 
         {/* Error Banner */}
         {generalError && (
-          <div className="mx-6 mt-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30">
+          <div className="mx-6 mt-4 p-3 rounded-[2px] bg-red-500/10 border border-red-500/30">
             <p className="text-red-400 text-sm text-center">{generalError}</p>
           </div>
         )}

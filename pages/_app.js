@@ -1,6 +1,7 @@
 import '../styles/globals.css'
 import { useState, createContext, useEffect, useCallback } from 'react'
 import { store } from '../lib/store'
+import { fraunces, inter } from '../lib/fonts'
 
 export const AuthContext = createContext(null)
 export const ThemeContext = createContext(null)
@@ -92,7 +93,15 @@ export default function App({ Component, pageProps }) {
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      <AuthContext.Provider value={{ 
+      {/* Self-hosted font variables, set at the root so body-level
+          CSS in globals.css can resolve them. */}
+      <style jsx global>{`
+        html {
+          --font-fraunces: ${fraunces.style.fontFamily};
+          --font-inter: ${inter.style.fontFamily};
+        }
+      `}</style>
+      <AuthContext.Provider value={{
         user, 
         isLoggedIn, 
         isAdmin: user?.isAdmin || false,

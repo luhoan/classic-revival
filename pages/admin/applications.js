@@ -44,7 +44,7 @@ export default function AdminApplications() {
   const statusColors = {
     pending: { bg: 'rgba(201, 162, 39, 0.2)', color: 'var(--gold)' },
     approved: { bg: 'rgba(45, 74, 62, 0.2)', color: '#4ade80' },
-    rejected: { bg: 'rgba(114, 47, 55, 0.2)', color: '#f87171' }
+    rejected: { bg: 'rgba(161, 58, 58, 0.2)', color: '#f87171' }
   }
 
   if (!isAdmin) return null
@@ -75,7 +75,7 @@ export default function AdminApplications() {
                 <button
                   key={f}
                   onClick={() => setFilter(f)}
-                  className="px-3 py-1.5 rounded-full text-sm font-accent capitalize transition-all"
+                  className="px-3 py-1.5 rounded-[2px] text-sm font-accent capitalize transition-all"
                   style={{
                     background: filter === f ? 'var(--burgundy)' : 'var(--bg-secondary)',
                     color: filter === f ? 'white' : 'var(--text-secondary)',
@@ -93,7 +93,7 @@ export default function AdminApplications() {
                 {filteredApps.length > 0 ? filteredApps.map(app => (
                   <div 
                     key={app.id}
-                    className={`p-5 rounded-xl cursor-pointer transition-all ${selectedApp?.id === app.id ? 'ring-2 ring-burgundy' : ''}`}
+                    className={`p-5 rounded-[3px] cursor-pointer transition-all ${selectedApp?.id === app.id ? 'ring-2 ring-burgundy' : ''}`}
                     style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}
                     onClick={() => setSelectedApp(app)}
                   >
@@ -114,7 +114,7 @@ export default function AdminApplications() {
                     </div>
                   </div>
                 )) : (
-                  <div className="text-center py-12 rounded-xl" style={{ background: 'var(--bg-secondary)' }}>
+                  <div className="text-center py-12 rounded-[3px]" style={{ background: 'var(--bg-secondary)' }}>
                     <ClipboardList className="w-12 h-12 mx-auto mb-3" style={{ color: 'var(--text-secondary)', opacity: 0.3 }} />
                     <p style={{ color: 'var(--text-secondary)' }}>No applications found</p>
                   </div>
@@ -124,7 +124,7 @@ export default function AdminApplications() {
               {/* Detail Panel */}
               <div className="lg:col-span-1">
                 {selectedApp ? (
-                  <div className="sticky top-24 rounded-xl p-5" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+                  <div className="sticky top-24 rounded-[3px] p-5" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="font-display font-bold" style={{ color: 'var(--text-primary)' }}>Application Details</h3>
                       <button onClick={() => setSelectedApp(null)}>
@@ -177,15 +177,15 @@ export default function AdminApplications() {
                           <>
                             <button 
                               onClick={() => handleUpdateStatus(selectedApp.id, 'approved')}
-                              className="flex-1 py-2 rounded-lg font-accent text-sm flex items-center justify-center gap-1"
+                              className="flex-1 py-2 rounded-[2px] font-accent text-sm flex items-center justify-center gap-1"
                               style={{ background: 'rgba(45, 74, 62, 0.2)', color: '#4ade80' }}
                             >
                               <Check className="w-4 h-4" /> Approve
                             </button>
                             <button 
                               onClick={() => handleUpdateStatus(selectedApp.id, 'rejected')}
-                              className="flex-1 py-2 rounded-lg font-accent text-sm flex items-center justify-center gap-1"
-                              style={{ background: 'rgba(114, 47, 55, 0.2)', color: '#f87171' }}
+                              className="flex-1 py-2 rounded-[2px] font-accent text-sm flex items-center justify-center gap-1"
+                              style={{ background: 'rgba(161, 58, 58, 0.2)', color: '#f87171' }}
                             >
                               <X className="w-4 h-4" /> Reject
                             </button>
@@ -193,7 +193,7 @@ export default function AdminApplications() {
                         )}
                         <button 
                           onClick={() => handleDelete(selectedApp.id)}
-                          className="w-full py-2 rounded-lg font-accent text-sm flex items-center justify-center gap-1 mt-2"
+                          className="w-full py-2 rounded-[2px] font-accent text-sm flex items-center justify-center gap-1 mt-2"
                           style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#f87171' }}
                         >
                           <Trash2 className="w-4 h-4" /> Delete
@@ -202,7 +202,7 @@ export default function AdminApplications() {
                     </div>
                   </div>
                 ) : (
-                  <div className="rounded-xl p-8 text-center" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+                  <div className="rounded-[3px] p-8 text-center" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
                     <Eye className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--text-secondary)', opacity: 0.3 }} />
                     <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Select an application to view details</p>
                   </div>
