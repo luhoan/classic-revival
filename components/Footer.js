@@ -116,8 +116,8 @@ export default function Footer() {
           <p>{site.legal.statusLine} {site.legal.taxLine}</p>
           <div className="space-y-3">
             <p>
-              Some Classic Revival initiatives described on this site — including public book exchanges —
-              are still in development. Campaign pages state clearly what has and has not launched.
+              Some Classic Revival initiatives described on this site are still in their earliest
+              stages. Campaign pages state clearly what has and has not launched.
             </p>
             <p>Privacy policy and accessibility statement coming soon.</p>
           </div>

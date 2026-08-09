@@ -94,6 +94,34 @@ export default function About() {
                 lead="Classic Revival is founded and run by students. More faces will appear here as the team grows."
               />
             </div>
+            <figure className="reveal mb-12 mx-auto w-full max-w-2xl">
+              <div className="relative p-3 border" style={{ borderColor: 'var(--border-color)' }}>
+                <div
+                  className="relative overflow-hidden border"
+                  style={{
+                    borderColor: 'var(--border-color)',
+                    background:
+                      'radial-gradient(120% 90% at 50% 12%, var(--bg-secondary) 0%, var(--bg-tertiary) 58%, #DCD2BA 100%)',
+                  }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/photos/founders-group.png"
+                    alt="Raphael Pagani, Levi Segal, and Hershey Woolfson seated side by side, each holding a book from an early Classic Revival collection"
+                    className="block w-full h-auto pt-6"
+                    style={{
+                      WebkitMaskImage:
+                        'linear-gradient(180deg, black 88%, transparent 100%)',
+                      maskImage:
+                        'linear-gradient(180deg, black 88%, transparent 100%)',
+                    }}
+                  />
+                </div>
+              </div>
+              <figcaption className="caption-italic mt-3 text-center">
+                The founders — Raphael Pagani, Levi Segal, and Hershey Woolfson (left to right)
+              </figcaption>
+            </figure>
             <ul className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 list-none items-stretch reveal-stagger">
               {team.map((member) => (
                 <TeamCard key={member.name} member={member} />
@@ -200,6 +228,23 @@ export default function About() {
                 </li>
               ))}
             </ul>
+
+            <figure className="reveal mb-10">
+              <div className="relative p-3 border" style={{ borderColor: 'var(--border-color)' }}>
+                <div className="relative aspect-[4/3] overflow-hidden border" style={{ borderColor: 'var(--border-color)' }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/photos/mailbox-first-books.jpg"
+                    alt="Donated paperbacks and hardcovers laid out on a wooden floor — the first books given through Classic Revival's book donation boxes"
+                    className="absolute inset-0 w-full h-full object-cover"
+                    style={{ objectPosition: '50% 45%' }}
+                  />
+                </div>
+              </div>
+              <figcaption className="caption-italic mt-3 text-center">
+                The first books donated to our public book exchanges, now at a public library
+              </figcaption>
+            </figure>
 
             <h3 className="font-display text-xl font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>
               What we’re building next

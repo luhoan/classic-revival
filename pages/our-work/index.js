@@ -8,7 +8,7 @@ import { campaigns, campaignStatus } from '../../lib/content/campaigns'
 import { useReveal } from '../../lib/useReveal'
 
 /* Real photographs for the campaigns that have physically happened.
-   The planned campaign keeps its quote panel — no imagery implying
+   A campaign without a photo keeps its quote panel — no imagery implying
    something that hasn't been built. */
 const CAMPAIGN_PHOTOS = {
   'school-books-and-reading-clubs': {
@@ -20,6 +20,11 @@ const CAMPAIGN_PHOTOS = {
     src: '/photos/donation-box-atlanta.jpg',
     alt: 'A Classic Revival book donation box — white with blue trim on a yellow post — installed beside a sidewalk in Atlanta',
     position: '50% 35%',
+  },
+  'public-book-exchanges': {
+    src: '/photos/mailbox-first-books.jpg',
+    alt: "Donated paperbacks and hardcovers laid out on a wooden floor — the first books stocking Classic Revival's public book exchange boxes",
+    position: '50% 45%',
   },
 }
 
@@ -75,20 +80,38 @@ export default function OurWork() {
                 </div>
               </div>
               {CAMPAIGN_PHOTOS[campaign.slug] ? (
-                <figure className={i % 2 === 1 ? 'lg:order-1' : ''}>
-                  <div className="relative aspect-[4/3] overflow-hidden border" style={{ borderColor: 'var(--border-color)' }}>
-                    <Image
-                      src={CAMPAIGN_PHOTOS[campaign.slug].src}
-                      alt={CAMPAIGN_PHOTOS[campaign.slug].alt}
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 600px"
-                      style={{ objectFit: 'cover', objectPosition: CAMPAIGN_PHOTOS[campaign.slug].position }}
-                    />
-                  </div>
-                  <figcaption className="caption-italic mt-3">
-                    {campaign.tagline}
-                  </figcaption>
-                </figure>
+                <div className={i % 2 === 1 ? 'lg:order-1' : ''}>
+                  <figure>
+                    <div className="relative aspect-[4/3] overflow-hidden border" style={{ borderColor: 'var(--border-color)' }}>
+                      <Image
+                        src={CAMPAIGN_PHOTOS[campaign.slug].src}
+                        alt={CAMPAIGN_PHOTOS[campaign.slug].alt}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 600px"
+                        style={{ objectFit: 'cover', objectPosition: CAMPAIGN_PHOTOS[campaign.slug].position }}
+                      />
+                    </div>
+                    <figcaption className="caption-italic mt-3">
+                      {campaign.tagline}
+                    </figcaption>
+                  </figure>
+                  {CAMPAIGN_PHOTOS[campaign.slug].extra && (
+                    <figure className="mt-6">
+                      <div className="relative aspect-[16/7] overflow-hidden border" style={{ borderColor: 'var(--border-color)' }}>
+                        <Image
+                          src={CAMPAIGN_PHOTOS[campaign.slug].extra.src}
+                          alt={CAMPAIGN_PHOTOS[campaign.slug].extra.alt}
+                          fill
+                          sizes="(max-width: 1024px) 100vw, 600px"
+                          style={{ objectFit: 'cover', objectPosition: CAMPAIGN_PHOTOS[campaign.slug].extra.position }}
+                        />
+                      </div>
+                      <figcaption className="caption-italic mt-3">
+                        {CAMPAIGN_PHOTOS[campaign.slug].extra.caption}
+                      </figcaption>
+                    </figure>
+                  )}
+                </div>
               ) : (
                 <figure
                   className={`h-full flex flex-col justify-center p-8 md:p-10 rounded-[3px] ${i % 2 === 1 ? 'lg:order-1' : ''}`}
@@ -133,8 +156,8 @@ export default function OurWork() {
               <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
                 We keep these labels honest. Nothing on this site is marked{' '}
                 <em>{campaignStatus({ status: 'active' }).label.toLowerCase()}</em> until the work
-                it describes has actually happened — and the public book exchanges, in
-                particular, have not launched yet.
+                it describes has actually happened — and every campaign page states
+                plainly what exists today and what is still ahead.
               </p>
             </div>
             <p className="text-center mt-10">

@@ -4,10 +4,11 @@ Real material the organization should gather to replace placeholders.
 Nothing on the site pretends these exist yet.
 
 ## Photography (highest impact)
-- [ ] Real photos of the team (for `public/team/`, then set `photo` in `lib/content/team.js`)
+- [x] Founders group photo — background-removed cutout on the About page (`public/photos/founders-group.png`)
+- [ ] Individual headshots for the team cards (for `public/team/`, then set `photo` in `lib/content/team.js`)
 - [ ] Students reading or discussing books (with signed photo/media consent — see note below)
-- [ ] Book collections being sorted or delivered
-- [ ] The first donation box and the first public exchange box, once built
+- [x] Book collections being sorted or delivered — first mailbox donation on the About page (`public/photos/mailbox-first-books.jpg`)
+- [x] The first donation box (`public/photos/donation-box-atlanta.jpg`) and the first public-exchange books (`public/photos/mailbox-first-books.jpg`); still wanted: a photo of the exchange boxes themselves at the library
 - A social-sharing image (1200×630) at `public/og-image.png`
 
 ## Facts & records (unlock hidden sections)

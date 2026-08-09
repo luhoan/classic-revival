@@ -19,7 +19,7 @@ const donateFaqs = [
   },
   {
     q: 'Can I sponsor a specific campaign?',
-    a: `Yes. Give through the donation page and email us at ${site.contact.email} noting the campaign you want your gift to support — a school collection, a reading club, a donation box, or the public exchange pilot.`,
+    a: `Yes. Give through the donation page and email us at ${site.contact.email} noting the campaign you want your gift to support — a school collection, a reading club, a donation box, or the public book exchanges.`,
   },
 ]
 

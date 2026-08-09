@@ -22,6 +22,12 @@ const CAMPAIGN_PHOTOS = {
     position: '50% 35%',
     caption: 'One of two donation boxes standing in Atlanta today',
   },
+  'public-book-exchanges': {
+    src: '/photos/mailbox-first-books.jpg',
+    alt: "Donated paperbacks and hardcovers laid out on a wooden floor — the first books stocking Classic Revival's public book exchange boxes",
+    position: '50% 45%',
+    caption: 'The first books donated to our exchange boxes, now at a public library',
+  },
 }
 
 export async function getStaticPaths() {
@@ -166,20 +172,38 @@ export default function CampaignPage({ slug }) {
                 ))}
               </ol>
               {CAMPAIGN_PHOTOS[slug] ? (
-                <figure className="lg:sticky lg:top-24">
-                  <div className="relative aspect-[4/3] overflow-hidden border" style={{ borderColor: 'var(--border-color)' }}>
-                    <Image
-                      src={CAMPAIGN_PHOTOS[slug].src}
-                      alt={CAMPAIGN_PHOTOS[slug].alt}
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 420px"
-                      style={{ objectFit: 'cover', objectPosition: CAMPAIGN_PHOTOS[slug].position }}
-                    />
-                  </div>
-                  <figcaption className="caption-italic mt-3">
-                    {CAMPAIGN_PHOTOS[slug].caption}
-                  </figcaption>
-                </figure>
+                <div className="lg:sticky lg:top-24">
+                  <figure>
+                    <div className="relative aspect-[4/3] overflow-hidden border" style={{ borderColor: 'var(--border-color)' }}>
+                      <Image
+                        src={CAMPAIGN_PHOTOS[slug].src}
+                        alt={CAMPAIGN_PHOTOS[slug].alt}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 420px"
+                        style={{ objectFit: 'cover', objectPosition: CAMPAIGN_PHOTOS[slug].position }}
+                      />
+                    </div>
+                    <figcaption className="caption-italic mt-3">
+                      {CAMPAIGN_PHOTOS[slug].caption}
+                    </figcaption>
+                  </figure>
+                  {CAMPAIGN_PHOTOS[slug].extra && (
+                    <figure className="mt-6">
+                      <div className="relative aspect-[16/8] overflow-hidden border" style={{ borderColor: 'var(--border-color)' }}>
+                        <Image
+                          src={CAMPAIGN_PHOTOS[slug].extra.src}
+                          alt={CAMPAIGN_PHOTOS[slug].extra.alt}
+                          fill
+                          sizes="(max-width: 1024px) 100vw, 420px"
+                          style={{ objectFit: 'cover', objectPosition: CAMPAIGN_PHOTOS[slug].extra.position }}
+                        />
+                      </div>
+                      <figcaption className="caption-italic mt-3">
+                        {CAMPAIGN_PHOTOS[slug].extra.caption}
+                      </figcaption>
+                    </figure>
+                  )}
+                </div>
               ) : (
                 <figure
                   className="hidden lg:flex h-full flex-col justify-center p-8 rounded-[3px] lg:sticky lg:top-24"

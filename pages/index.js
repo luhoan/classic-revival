@@ -45,8 +45,8 @@ const modelSteps = [
   { title: 'They keep moving', detail: 'Read, returned, passed on. One book can reach many readers.' },
 ]
 
-/* Real photographs for the two ACTIVE campaigns. The third campaign is
-   planned — it gets a typographic panel, never a photo implying it exists. */
+/* Real photographs for the ACTIVE campaigns only — never imagery
+   implying a program that hasn't happened yet. */
 const campaignPhotos = {
   'school-books-and-reading-clubs': {
     src: '/photos/books-band.jpg',
@@ -56,6 +56,11 @@ const campaignPhotos = {
     src: '/photos/box-square.jpg',
     alt: 'A Classic Revival book donation box — white with blue trim on a yellow post — in Atlanta',
     objectPosition: '50% 40%',
+  },
+  'public-book-exchanges': {
+    src: '/photos/mailbox-first-books.jpg',
+    alt: "Donated paperbacks and hardcovers laid out on a wooden floor — the first books stocking Classic Revival's public book exchange boxes",
+    objectPosition: '50% 45%',
   },
 }
 
@@ -354,21 +359,36 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ---- Real, verified work: a donation box standing in Atlanta today ---- */}
+        {/* ---- Real, verified work: donation boxes standing in Atlanta today,
+             and the first books they have already sent onward ---- */}
         <section className="pb-20 md:pb-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-6 md:gap-8 reveal-stagger">
             <figure className="reveal">
-              <div className="relative aspect-[16/6] overflow-hidden border" style={{ borderColor: 'var(--border-color)' }}>
+              <div className="relative aspect-[4/3] overflow-hidden border" style={{ borderColor: 'var(--border-color)' }}>
                 <Image
                   src="/photos/donation-box-atlanta.jpg"
                   alt="A Classic Revival book donation box — white with blue trim on a yellow post — installed beside a sidewalk in Atlanta"
                   fill
-                  sizes="(max-width: 1024px) 100vw, 1216px"
+                  sizes="(max-width: 768px) 100vw, 600px"
                   style={{ objectFit: 'cover', objectPosition: '50% 32%' }}
                 />
               </div>
               <figcaption className="caption-italic mt-3">
                 One of two Classic Revival donation boxes collecting books in Atlanta today
+              </figcaption>
+            </figure>
+            <figure className="reveal">
+              <div className="relative aspect-[4/3] overflow-hidden border" style={{ borderColor: 'var(--border-color)' }}>
+                <Image
+                  src="/photos/mailbox-first-books.jpg"
+                  alt="Donated paperbacks and hardcovers laid out on a wooden floor — the first books given through Classic Revival's donation boxes"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 600px"
+                  style={{ objectFit: 'cover', objectPosition: '50% 45%' }}
+                />
+              </div>
+              <figcaption className="caption-italic mt-3">
+                The first books donated to our public book exchanges, now at a public library
               </figcaption>
             </figure>
           </div>
