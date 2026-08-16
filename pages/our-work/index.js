@@ -20,6 +20,12 @@ const CAMPAIGN_PHOTOS = {
     src: '/photos/donation-box-atlanta.jpg',
     alt: 'A Classic Revival book donation box — white with blue trim on a yellow post — installed beside a sidewalk in Atlanta',
     position: '50% 35%',
+    extra: {
+      src: '/photos/sandy-springs-library-books.jpg',
+      alt: 'Donated paperbacks and hardcovers spread across a table at the Sandy Springs Library used bookstore',
+      position: '50% 55%',
+      caption: 'Books from our boxes, donated to the Sandy Springs Library',
+    },
   },
   'public-book-exchanges': {
     src: '/photos/mailbox-first-books.jpg',

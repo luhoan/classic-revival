@@ -246,6 +246,23 @@ export default function About() {
               </figcaption>
             </figure>
 
+            <figure className="reveal mb-10">
+              <div className="relative p-3 border" style={{ borderColor: 'var(--border-color)' }}>
+                <div className="relative aspect-[4/3] overflow-hidden border" style={{ borderColor: 'var(--border-color)' }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/photos/sandy-springs-library-books.jpg"
+                    alt="Donated paperbacks and hardcovers spread across a table at the Sandy Springs Library used bookstore"
+                    className="absolute inset-0 w-full h-full object-cover"
+                    style={{ objectPosition: '50% 60%' }}
+                  />
+                </div>
+              </div>
+              <figcaption className="caption-italic mt-3 text-center">
+                Books collected through our donation boxes, donated to the Sandy Springs Library
+              </figcaption>
+            </figure>
+
             <h3 className="font-display text-xl font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>
               What we’re building next
             </h3>

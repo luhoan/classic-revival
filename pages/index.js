@@ -359,36 +359,50 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ---- Real, verified work: donation boxes standing in Atlanta today,
-             and the first books they have already sent onward ---- */}
+        {/* ---- Real, verified work: two of our five book boxes,
+             and books they have already sent onward to the Sandy Springs Library ---- */}
         <section className="pb-20 md:pb-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-6 md:gap-8 reveal-stagger">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-3 gap-6 md:gap-8 reveal-stagger">
             <figure className="reveal">
               <div className="relative aspect-[4/3] overflow-hidden border" style={{ borderColor: 'var(--border-color)' }}>
                 <Image
                   src="/photos/donation-box-atlanta.jpg"
                   alt="A Classic Revival book donation box — white with blue trim on a yellow post — installed beside a sidewalk in Atlanta"
                   fill
-                  sizes="(max-width: 768px) 100vw, 600px"
+                  sizes="(max-width: 768px) 100vw, 450px"
                   style={{ objectFit: 'cover', objectPosition: '50% 32%' }}
                 />
               </div>
               <figcaption className="caption-italic mt-3">
-                One of two Classic Revival donation boxes collecting books in Atlanta today
+                The first Classic Revival donation box, collecting books in Atlanta today
               </figcaption>
             </figure>
             <figure className="reveal">
               <div className="relative aspect-[4/3] overflow-hidden border" style={{ borderColor: 'var(--border-color)' }}>
                 <Image
-                  src="/photos/mailbox-first-books.jpg"
-                  alt="Donated paperbacks and hardcovers laid out on a wooden floor — the first books given through Classic Revival's donation boxes"
+                  src="/photos/donation-box-atlanta-2.jpg"
+                  alt="A Classic Revival book donation box — green with a silver roof on a blue post — standing in a wooded Atlanta neighborhood"
                   fill
-                  sizes="(max-width: 768px) 100vw, 600px"
-                  style={{ objectFit: 'cover', objectPosition: '50% 45%' }}
+                  sizes="(max-width: 768px) 100vw, 450px"
+                  style={{ objectFit: 'cover', objectPosition: '50% 40%' }}
                 />
               </div>
               <figcaption className="caption-italic mt-3">
-                The first books donated to our public book exchanges, now at a public library
+                Our second donation box, up and collecting books in Atlanta
+              </figcaption>
+            </figure>
+            <figure className="reveal">
+              <div className="relative aspect-[4/3] overflow-hidden border" style={{ borderColor: 'var(--border-color)' }}>
+                <Image
+                  src="/photos/sandy-springs-library-books.jpg"
+                  alt="Donated paperbacks and hardcovers spread across a table at the Sandy Springs Library used bookstore"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 450px"
+                  style={{ objectFit: 'cover', objectPosition: '50% 60%' }}
+                />
+              </div>
+              <figcaption className="caption-italic mt-3">
+                Books collected through those boxes, donated to the Sandy Springs Library
               </figcaption>
             </figure>
           </div>

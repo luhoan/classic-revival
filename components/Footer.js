@@ -6,6 +6,7 @@ import { involvementPathways, forms } from '../lib/content/forms'
 const exploreLinks = [
   { label: 'Library', href: '/library' },
   { label: 'Resources', href: '/resources' },
+  { label: 'Photos', href: '/photos' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },
   { label: 'Donate', href: '/donate' },

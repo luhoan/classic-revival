@@ -17,10 +17,10 @@ const CAMPAIGN_PHOTOS = {
     caption: 'Part of a collection donated to a partner school',
   },
   'community-donation-boxes': {
-    src: '/photos/donation-box-atlanta.jpg',
-    alt: 'A Classic Revival book donation box — white with blue trim on a yellow post — installed beside a sidewalk in Atlanta',
-    position: '50% 35%',
-    caption: 'One of two donation boxes standing in Atlanta today',
+    src: '/photos/donation-box-atlanta-2.jpg',
+    alt: 'A Classic Revival book donation box — green with a silver roof on a blue post — standing in a wooded Atlanta neighborhood',
+    position: '50% 40%',
+    caption: 'One of five Classic Revival book boxes collecting donations today',
   },
   'public-book-exchanges': {
     src: '/photos/mailbox-first-books.jpg',

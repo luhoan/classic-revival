@@ -19,11 +19,22 @@ const RELATED_CAMPAIGN = {
   interest: null,
 }
 
+/* A real photograph shown beside a form, where one exists — so a
+   prospective host can see exactly what they'd be hosting. */
+const FORM_PHOTOS = {
+  'host-a-box': {
+    src: '/photos/donation-box-atlanta-2.jpg',
+    alt: 'A Classic Revival book donation box — green with a silver roof on a blue post — standing in a wooded Atlanta neighborhood',
+    caption: 'One of five Classic Revival book boxes already up and collecting books',
+  },
+}
+
 export default function InvolvementForm({ slug }) {
   useReveal()
   const form = forms[slug]
   const relatedSlug = RELATED_CAMPAIGN[slug]
   const related = relatedSlug ? getCampaign(relatedSlug) : null
+  const photo = FORM_PHOTOS[slug]
 
   return (
     <>
@@ -44,6 +55,20 @@ export default function InvolvementForm({ slug }) {
               </div>
 
               <aside aria-label="About this form" className="lg:sticky lg:top-24 space-y-6">
+                {photo && (
+                  <figure className="reveal">
+                    <div className="relative aspect-[4/5] overflow-hidden border" style={{ borderColor: 'var(--border-color)' }}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={photo.src}
+                        alt={photo.alt}
+                        className="absolute inset-0 w-full h-full object-cover"
+                        style={{ objectPosition: '50% 40%' }}
+                      />
+                    </div>
+                    <figcaption className="caption-italic mt-3">{photo.caption}</figcaption>
+                  </figure>
+                )}
                 <div className="card-classic reveal">
                   <p className="eyebrow mb-4">What happens next</p>
                   <ol className="space-y-3 text-sm leading-relaxed list-none" style={{ color: 'var(--text-secondary)' }}>
