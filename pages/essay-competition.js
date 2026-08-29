@@ -56,7 +56,7 @@ export default function EssayCompetition() {
     <>
       <Seo
         title="Essay Competition"
-        description="Choose one of five questions, take a classical literary work seriously, and make an argument of your own in 200–350 words. Sign up for the Classic Revival essay competition."
+        description="Choose one of five questions, take a classical literary work seriously, and make an argument of your own in 200–350 words. The best essays win prize money and free books. Sign up for the Classic Revival essay competition."
         path="/essay-competition"
       />
       <Navbar />
@@ -64,7 +64,7 @@ export default function EssayCompetition() {
         <PageHero
           eyebrow="Get Involved"
           title="The Essay Competition"
-          lead="Choose one of five questions, take a classical literary work seriously, and make an argument of your own — in 200–350 words. Bring in history, philosophy, or the world around you wherever it sharpens your case."
+          lead="Choose one of five questions, take a classical literary work seriously, and make an argument of your own — in 200–350 words. The best essays win prize money and free books."
         >
           <a href="#sign-up" className="btn-primary">Sign up</a>
           <a href="#questions" className="btn-secondary">Read the five questions</a>
@@ -190,6 +190,10 @@ export default function EssayCompetition() {
                 <div className="card-classic reveal">
                   <p className="eyebrow mb-4">Good to know</p>
                   <ul className="space-y-3 text-sm leading-relaxed list-none" style={{ color: 'var(--text-secondary)' }}>
+                    <li>
+                      <strong style={{ color: 'var(--text-primary)' }}>The prizes:</strong> the best essays win
+                      prize money and free books.
+                    </li>
                     <li>You can sign up before your essay is written — send the Google Doc link whenever it’s ready.</li>
                     <li>Not sure which question yet? Pick “Not sure yet” and change your mind later; only the essay you submit counts.</li>
                     <li>

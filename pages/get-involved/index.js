@@ -39,7 +39,7 @@ export default function GetInvolved() {
                 </h2>
                 <p className="text-sm leading-relaxed prose-measure" style={{ color: 'var(--text-secondary)' }}>
                   Choose one of five questions, take a classical work seriously, and make an argument
-                  of your own in 200–350 words.
+                  of your own in 200–350 words. The best essays win prize money and free books.
                 </p>
               </div>
               <span

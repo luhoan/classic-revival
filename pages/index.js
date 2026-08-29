@@ -170,7 +170,8 @@ export default function Home() {
                   <h2 className="mb-4">The Essay Competition</h2>
                   <p className="leading-relaxed mb-8 prose-measure" style={{ color: 'var(--text-secondary)' }}>
                     Choose one of five questions, take a classical literary work seriously, and
-                    make an argument of your own — in 200–350 words.
+                    make an argument of your own — in 200–350 words. The best essays win prize
+                    money and free books.
                   </p>
                   <Link href="/essay-competition" className="btn-primary">
                     Read the questions &amp; sign up
