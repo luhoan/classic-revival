@@ -60,11 +60,29 @@ export default function Navbar() {
   const ourWork = site.nav.find((item) => item.href === '/our-work')
   const restNav = site.nav.filter((item) => item.href !== '/our-work')
 
+  // Site-wide announcement strip; hidden on the page it points to.
+  const showAnnouncement = router.pathname !== '/essay-competition'
+
   return (
     <>
       <a href="#main" className="skip-link">Skip to main content</a>
 
       <nav className="site-header fixed top-0 left-0 right-0 z-50" aria-label="Main navigation">
+        {showAnnouncement && (
+          <Link href="/essay-competition" className="block" style={{ background: 'var(--burgundy-dark)' }}>
+            <p className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-9 flex items-center justify-center gap-2 text-xs sm:text-sm text-white">
+              <span className="font-semibold uppercase tracking-[0.08em] shrink-0" style={{ color: 'var(--gold-light)' }}>
+                Now open
+              </span>
+              <span aria-hidden="true" style={{ color: 'var(--gold-light)' }}>·</span>
+              <span className="truncate">
+                The Essay Competition
+                <span className="hidden md:inline"> — five questions, 200–350 words</span>
+              </span>
+              <span className="font-semibold underline underline-offset-2 shrink-0">Sign up →</span>
+            </p>
+          </Link>
+        )}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 gap-4">
             {/* Logo */}
@@ -317,6 +335,10 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
+
+      {/* In-flow spacer matching the announcement strip's height, so page
+          content (offset only for the h-16 nav via pt-16) isn't covered. */}
+      {showAnnouncement && <div aria-hidden="true" className="h-9" />}
 
       <AuthModal
         isOpen={showAuthModal}
