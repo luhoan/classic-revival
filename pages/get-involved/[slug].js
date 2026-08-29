@@ -124,7 +124,11 @@ export default function InvolvementForm({ slug }) {
 
 export function getStaticPaths() {
   return {
-    paths: Object.keys(forms).map((slug) => ({ params: { slug } })),
+    // Standalone forms (e.g. the essay competition) render on their own
+    // dedicated pages instead of this generic layout.
+    paths: Object.keys(forms)
+      .filter((slug) => !forms[slug].standalone)
+      .map((slug) => ({ params: { slug } })),
     fallback: false,
   }
 }

@@ -6,7 +6,7 @@ import Seo from '../components/Seo'
 import { StatusBadge, SectionHeading, MetricStrip } from '../components/ui'
 import { site } from '../lib/content/site'
 import { campaigns } from '../lib/content/campaigns'
-import { involvementPathways, forms } from '../lib/content/forms'
+import { involvementPathways, forms, essayQuestions } from '../lib/content/forms'
 import { useReveal } from '../lib/useReveal'
 
 /* Reasons young readers disengage — the access-and-exposure thesis. */
@@ -154,6 +154,46 @@ export default function Home() {
         <section>
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
             <MetricStrip />
+          </div>
+        </section>
+
+        {/* ---- Essay competition announcement ---- */}
+        <section className="pb-14">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div
+              className="card-classic card-elevated reveal p-8 md:p-10"
+              style={{ borderColor: 'var(--gold)' }}
+            >
+              <div className="grid lg:grid-cols-[5fr_6fr] gap-10 lg:gap-14 items-center">
+                <div>
+                  <p className="eyebrow mb-3">Now open</p>
+                  <h2 className="mb-4">The Essay Competition</h2>
+                  <p className="leading-relaxed mb-8 prose-measure" style={{ color: 'var(--text-secondary)' }}>
+                    Choose one of five questions, take a classical literary work seriously, and
+                    make an argument of your own — in 200–350 words.
+                  </p>
+                  <Link href="/essay-competition" className="btn-primary">
+                    Read the questions &amp; sign up
+                  </Link>
+                </div>
+                <ol className="list-none space-y-4 border-t lg:border-t-0 lg:border-l pt-8 lg:pt-0 lg:pl-14" style={{ borderColor: 'var(--border-color)' }}>
+                  {essayQuestions.map((q) => (
+                    <li key={q.number} className="flex gap-4 items-baseline">
+                      <span
+                        aria-hidden="true"
+                        className="font-display onum text-xl font-semibold shrink-0"
+                        style={{ color: 'var(--gold)' }}
+                      >
+                        {q.number}
+                      </span>
+                      <p className="font-display text-base font-semibold leading-snug" style={{ color: 'var(--text-primary)' }}>
+                        {q.title}
+                      </p>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </div>
           </div>
         </section>
 

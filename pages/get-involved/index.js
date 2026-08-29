@@ -26,6 +26,31 @@ export default function GetInvolved() {
 
         <section className="py-16" style={{ background: 'var(--bg-primary)' }}>
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Featured: the essay competition */}
+            <Link
+              href="/essay-competition"
+              className="card-classic card-elevated group mb-10 flex flex-col md:flex-row md:items-center justify-between gap-4 no-underline reveal"
+              style={{ borderColor: 'var(--gold)' }}
+            >
+              <div>
+                <p className="eyebrow mb-2">Now open</p>
+                <h2 className="font-display text-xl font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>
+                  The Essay Competition
+                </h2>
+                <p className="text-sm leading-relaxed prose-measure" style={{ color: 'var(--text-secondary)' }}>
+                  Choose one of five questions, take a classical work seriously, and make an argument
+                  of your own in 200–350 words.
+                </p>
+              </div>
+              <span
+                className="inline-flex items-center gap-2 text-sm font-semibold annotation-underline shrink-0"
+                style={{ color: 'var(--link-accent)' }}
+              >
+                Read the questions &amp; sign up
+                <ArrowRight aria-hidden="true" className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+              </span>
+            </Link>
+
             <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 list-none reveal-stagger">
               {involvementPathways.map((p) => {
                 const form = forms[p.formSlug]

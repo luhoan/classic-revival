@@ -68,6 +68,11 @@ export default function Footer() {
               Get Involved
             </h2>
             <ul className="space-y-2.5">
+              <li>
+                <Link href="/essay-competition" className="link-quiet text-sm">
+                  Essay competition
+                </Link>
+              </li>
               {involvementPathways.map((p) => (
                 <li key={p.formSlug}>
                   <Link href={`/get-involved/${p.formSlug}`} className="link-quiet text-sm">
