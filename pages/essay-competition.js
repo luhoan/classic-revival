@@ -34,7 +34,7 @@ const steps = [
   {
     icon: PenLine,
     title: 'Choose a question',
-    detail: 'Pick one of the five questions below — whichever one you actually have something to say about.',
+    detail: 'Read the five questions below and pick the one you have something to say about.',
   },
   {
     icon: FileText,
@@ -56,7 +56,7 @@ export default function EssayCompetition() {
     <>
       <Seo
         title="Essay Competition"
-        description="Choose one of five questions, take a classical literary work seriously, and make an argument of your own in 200–350 words. The best essays win prize money and free books. Sign up for the Classic Revival essay competition."
+        description="Pick one of five questions and make your own argument about a classical work in 200–350 words. The best essays win prize money and free books. Sign up for the Classic Revival essay competition."
         path="/essay-competition"
       />
       <Navbar />
@@ -64,7 +64,7 @@ export default function EssayCompetition() {
         <PageHero
           eyebrow="Get Involved"
           title="The Essay Competition"
-          lead="Choose one of five questions, take a classical literary work seriously, and make an argument of your own — in 200–350 words. The best essays win prize money and free books."
+          lead="Pick one of five questions and write a 200–350 word essay that makes your own argument about a classical work. The best essays win prize money and free books."
         >
           <a href="#sign-up" className="btn-primary">Sign up</a>
           <a href="#questions" className="btn-secondary">Read the five questions</a>
@@ -106,7 +106,7 @@ export default function EssayCompetition() {
               numeral="02"
               eyebrow="The questions"
               title="Choose one of five"
-              lead="Answer exactly one. Use at least one classical literary work as the primary basis for your argument — other works, historical context, philosophy, and contemporary examples are welcome where relevant."
+              lead="Answer exactly one, using at least one classical literary work as the primary basis for your argument. Other works, historical context, philosophy, and contemporary examples are welcome where relevant."
             />
             <ol className="space-y-5 list-none reveal-stagger">
               {essayQuestions.map((q) => (
@@ -165,7 +165,7 @@ export default function EssayCompetition() {
                 <div className="rule my-5" />
                 <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
                   Set the doc’s sharing to <strong style={{ color: 'var(--text-primary)' }}>“Anyone with the link can view”</strong>{' '}
-                  so we can read it, then paste the link into the sign-up form below — or email it to{' '}
+                  so we can read it, then paste the link into the sign-up form below or email it to{' '}
                   <a href={`mailto:${site.contact.email}`} className="link-quiet underline">{site.contact.email}</a>.
                 </p>
               </div>
@@ -194,7 +194,7 @@ export default function EssayCompetition() {
                       <strong style={{ color: 'var(--text-primary)' }}>The prizes:</strong> the best essays win
                       prize money and free books.
                     </li>
-                    <li>You can sign up before your essay is written — send the Google Doc link whenever it’s ready.</li>
+                    <li>You can sign up before your essay is written and send the Google Doc link once it’s ready.</li>
                     <li>Not sure which question yet? Pick “Not sure yet” and change your mind later; only the essay you submit counts.</li>
                     <li>
                       Need a classical work to start from? Browse the{' '}
