@@ -6,7 +6,8 @@ import Seo from '../components/Seo'
 import { StatusBadge, SectionHeading, MetricStrip } from '../components/ui'
 import { site } from '../lib/content/site'
 import { campaigns } from '../lib/content/campaigns'
-import { involvementPathways, forms, essayQuestions } from '../lib/content/forms'
+import { involvementPathways, forms } from '../lib/content/forms'
+import { competition } from '../lib/content/competition'
 import { useReveal } from '../lib/useReveal'
 
 /* Reasons young readers disengage — the access-and-exposure thesis. */
@@ -164,34 +165,45 @@ export default function Home() {
               className="card-classic card-elevated reveal p-8 md:p-10"
               style={{ borderColor: 'var(--gold)' }}
             >
-              <div className="grid lg:grid-cols-[5fr_6fr] gap-10 lg:gap-14 items-center">
+              <div className="grid lg:grid-cols-[6fr_5fr] gap-10 lg:gap-14 items-center">
                 <div>
                   <p className="eyebrow mb-3">Now open</p>
-                  <h2 className="mb-4">The Essay Competition</h2>
+                  <h2 className="mb-4">{competition.name}</h2>
+                  <p className="leading-relaxed mb-4 prose-measure font-display italic" style={{ color: 'var(--text-primary)' }}>
+                    {competition.tagline}
+                  </p>
                   <p className="leading-relaxed mb-8 prose-measure" style={{ color: 'var(--text-secondary)' }}>
-                    Pick one of five questions and make your own argument about a classical
-                    work in 200–350 words. The best essays win prize money and free books.
+                    {competition.prompt} Answer in 600–1,000 words.{' '}
+                    {competition.eligibilityLine}
                   </p>
                   <Link href="/essay-competition" className="btn-primary">
-                    Read the questions &amp; sign up
+                    Read the prompt &amp; enter
                   </Link>
                 </div>
-                <ol className="list-none space-y-4 border-t lg:border-t-0 lg:border-l pt-8 lg:pt-0 lg:pl-14" style={{ borderColor: 'var(--border-color)' }}>
-                  {essayQuestions.map((q) => (
-                    <li key={q.number} className="flex gap-4 items-baseline">
-                      <span
-                        aria-hidden="true"
-                        className="font-display onum text-xl font-semibold shrink-0"
-                        style={{ color: 'var(--gold)' }}
-                      >
-                        {q.number}
-                      </span>
-                      <p className="font-display text-base font-semibold leading-snug" style={{ color: 'var(--text-primary)' }}>
-                        {q.title}
-                      </p>
-                    </li>
-                  ))}
-                </ol>
+                <div className="border-t lg:border-t-0 lg:border-l pt-8 lg:pt-0 lg:pl-14" style={{ borderColor: 'var(--border-color)' }}>
+                  <ol className="list-none space-y-4">
+                    {competition.prizes.map((prize) => (
+                      <li key={prize.place} className="flex gap-4 items-baseline">
+                        <span
+                          aria-hidden="true"
+                          className="font-display onum text-xl font-semibold shrink-0 w-9"
+                          style={{ color: 'var(--gold)' }}
+                        >
+                          {prize.place}
+                        </span>
+                        <p className="font-display text-lg font-semibold leading-snug" style={{ color: 'var(--text-primary)' }}>
+                          {prize.cash} + {prize.books}
+                        </p>
+                      </li>
+                    ))}
+                  </ol>
+                  <p className="text-sm leading-relaxed mt-5" style={{ color: 'var(--text-secondary)' }}>
+                    Plus prizes for selected honorable mentions.
+                  </p>
+                  <p className="text-sm font-semibold mt-4" style={{ color: 'var(--text-primary)' }}>
+                    Deadline: {competition.deadline.short}
+                  </p>
+                </div>
               </div>
             </div>
           </div>

@@ -76,10 +76,10 @@ export default function Navbar() {
               </span>
               <span aria-hidden="true" style={{ color: 'var(--gold-light)' }}>·</span>
               <span className="truncate">
-                The Essay Competition
-                <span className="hidden md:inline">: win prize money and free books</span>
+                The 2026 Essay Competition
+                <span className="hidden md:inline">: win up to $50 and 5 books</span>
               </span>
-              <span className="font-semibold underline underline-offset-2 shrink-0">Sign up →</span>
+              <span className="font-semibold underline underline-offset-2 shrink-0">Enter by Oct 15 →</span>
             </p>
           </Link>
         )}

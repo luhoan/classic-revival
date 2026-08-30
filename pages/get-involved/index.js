@@ -35,18 +35,19 @@ export default function GetInvolved() {
               <div>
                 <p className="eyebrow mb-2">Now open</p>
                 <h2 className="font-display text-xl font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>
-                  The Essay Competition
+                  The 2026 Essay Competition
                 </h2>
                 <p className="text-sm leading-relaxed prose-measure" style={{ color: 'var(--text-secondary)' }}>
-                  Pick one of five questions and make your own argument about a classical work
-                  in 200–350 words. The best essays win prize money and free books.
+                  Write 600–1,000 words on a question that still matters, raised by a work of
+                  classic literature or philosophy. First place wins $50 and 5 books. Open to
+                  students in grades 6–12 worldwide. Deadline October 15, 2026.
                 </p>
               </div>
               <span
                 className="inline-flex items-center gap-2 text-sm font-semibold annotation-underline shrink-0"
                 style={{ color: 'var(--link-accent)' }}
               >
-                Read the questions &amp; sign up
+                Read the prompt &amp; enter
                 <ArrowRight aria-hidden="true" className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
               </span>
             </Link>
