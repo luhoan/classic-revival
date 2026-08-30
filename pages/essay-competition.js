@@ -2,32 +2,29 @@ import Link from 'next/link'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import Seo from '../components/Seo'
-import SiteForm from '../components/SiteForm'
 import { PageHero, SectionHeading } from '../components/ui'
-import { forms } from '../lib/content/forms'
 import { competition } from '../lib/content/competition'
 import { site } from '../lib/content/site'
-import { Check, CalendarDays, Globe2, Ticket } from 'lucide-react'
+import { Check, CalendarDays, Globe2, Ticket, ExternalLink } from 'lucide-react'
 import { useReveal } from '../lib/useReveal'
 
 const steps = [
   {
     title: 'Write the essay',
-    detail: `Respond to the prompt in 600–1,000 words and give your essay a title.`,
+    detail: 'Respond to the prompt in 600–1,000 words and give your essay a title.',
   },
   {
-    title: 'Put it in a Google Doc',
-    detail: 'Set the doc’s sharing to “Anyone with the link can view” so the judges can read it.',
+    title: 'Prepare your details',
+    detail: 'Your name, grade, school, city and country, email address, and a parent or guardian contact if required.',
   },
   {
-    title: 'Submit the entry form',
-    detail: 'Fill out the form below with your details and the link to your essay.',
+    title: 'Upload through the entry form',
+    detail: 'Submit your essay and details through the official Google Form.',
   },
 ]
 
 export default function EssayCompetition() {
   useReveal()
-  const form = forms['essay-competition']
 
   const keyFacts = [
     { icon: CalendarDays, label: 'Deadline', value: competition.deadline.display },
@@ -189,54 +186,47 @@ export default function EssayCompetition() {
           </div>
         </section>
 
-        {/* How to enter + entry form */}
+        {/* How to enter */}
         <section id="enter" className="py-16">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <SectionHeading
               numeral="05"
               eyebrow="How to enter"
               title={`Submit by ${competition.deadline.short}`}
-              lead={form.intro}
+              lead="Entries go through our official Google Form. It takes a few minutes once your essay is ready."
             />
-            <div className="grid lg:grid-cols-[3fr_2fr] gap-10 lg:gap-16 items-start">
-              <div className="max-w-2xl card-elevated p-6 md:p-8">
-                <SiteForm schema={form} />
-              </div>
-              <aside aria-label="Entry details" className="lg:sticky lg:top-24 space-y-6">
-                <div className="card-classic reveal">
-                  <p className="eyebrow mb-4">Three steps</p>
-                  <ol className="space-y-3 text-sm leading-relaxed list-none" style={{ color: 'var(--text-secondary)' }}>
-                    {steps.map((step, i) => (
-                      <li key={step.title} className="flex gap-3">
-                        <span aria-hidden="true" className="font-display onum font-semibold" style={{ color: 'var(--gold)' }}>
-                          {i + 1}
-                        </span>
-                        <span>
-                          <strong style={{ color: 'var(--text-primary)' }}>{step.title}.</strong>{' '}
-                          {step.detail}
-                        </span>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-                <div className="card-classic reveal">
-                  <p className="eyebrow mb-4">Dates</p>
-                  <p className="text-sm leading-relaxed mb-3" style={{ color: 'var(--text-secondary)' }}>
-                    <strong style={{ color: 'var(--text-primary)' }}>Final deadline:</strong>{' '}
-                    {competition.deadline.display}.
+            <ol className="grid md:grid-cols-3 gap-5 list-none reveal-stagger mb-8">
+              {steps.map((step, i) => (
+                <li key={step.title} className="card-classic">
+                  <p className="font-display text-lg font-semibold mb-1.5" style={{ color: 'var(--text-primary)' }}>
+                    <span aria-hidden="true" className="onum mr-2" style={{ color: 'var(--gold)' }}>{i + 1}</span>
+                    {step.title}
                   </p>
                   <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-                    {competition.resultsBy}
+                    {step.detail}
                   </p>
-                </div>
-                <div className="card-classic text-sm leading-relaxed reveal" style={{ color: 'var(--text-secondary)' }}>
-                  <p>
-                    Questions? Write to{' '}
-                    <a href={`mailto:${site.contact.email}`} className="link-quiet underline">{site.contact.email}</a>{' '}
-                    and a member of the student team will get back to you.
-                  </p>
-                </div>
-              </aside>
+                </li>
+              ))}
+            </ol>
+            <div className="card-elevated p-8 md:p-10 text-center reveal" style={{ borderColor: 'var(--gold)' }}>
+              <a
+                href={competition.entryFormUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary text-base"
+              >
+                Open the entry form
+                <ExternalLink aria-hidden="true" className="w-4 h-4" />
+              </a>
+              <p className="text-sm leading-relaxed mt-5" style={{ color: 'var(--text-secondary)' }}>
+                The form opens in a new tab.{' '}
+                <strong style={{ color: 'var(--text-primary)' }}>Final deadline:</strong>{' '}
+                {competition.deadline.display}.
+              </p>
+              <p className="text-sm leading-relaxed mt-2" style={{ color: 'var(--text-secondary)' }}>
+                {competition.resultsBy} Questions? Write to{' '}
+                <a href={`mailto:${site.contact.email}`} className="link-quiet underline">{site.contact.email}</a>.
+              </p>
             </div>
           </div>
         </section>
