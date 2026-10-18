@@ -79,7 +79,7 @@ export default function Navbar() {
                 The 2026 Essay Competition
                 <span className="hidden md:inline">: win up to $50 and 5 books</span>
               </span>
-              <span className="font-semibold underline underline-offset-2 shrink-0">Enter by Oct 15 →</span>
+              <span className="font-semibold underline underline-offset-2 shrink-0">Enter by Nov 1 →</span>
             </p>
           </Link>
         )}

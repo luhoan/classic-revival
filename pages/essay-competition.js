@@ -36,7 +36,7 @@ export default function EssayCompetition() {
     <>
       <Seo
         title="2026 Essay Competition"
-        description="Old books. Living questions. Your voice. Answer one prompt about a work of classic literature or philosophy in 600–1,000 words. First place wins $50 and 5 books. Open to students in grades 6–12 worldwide. Deadline October 15, 2026."
+        description="Old books. Living questions. Your voice. Answer one prompt about a work of classic literature or philosophy in 600–1,000 words. First place wins $50 and 5 books. Open to students in grades 6–12 worldwide. Deadline November 1, 2026."
         path="/essay-competition"
       />
       <Navbar />

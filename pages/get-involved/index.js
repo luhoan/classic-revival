@@ -40,7 +40,7 @@ export default function GetInvolved() {
                 <p className="text-sm leading-relaxed prose-measure" style={{ color: 'var(--text-secondary)' }}>
                   Write 600–1,000 words on a question that still matters, raised by a work of
                   classic literature or philosophy. First place wins $50 and 5 books. Open to
-                  students in grades 6–12 worldwide. Deadline October 15, 2026.
+                  students in grades 6–12 worldwide. Deadline November 1, 2026.
                 </p>
               </div>
               <span
