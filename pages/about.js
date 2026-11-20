@@ -90,7 +90,7 @@ export default function About() {
             <div className="reveal">
               <SectionHeading
                 eyebrow="The people"
-                title="Meet the founders"
+                title="Meet the team"
                 lead="Classic Revival is founded and run by students. More faces will appear here as the team grows."
               />
             </div>
